@@ -1,0 +1,4 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { ContactBlock, PageIntro } from "@/components/portfolio";
+export const Route=createFileRoute("/contact")({head:()=>({meta:[{title:"Contact Ahmed Ali — Product Designer"},{name:"description",content:"Discuss UI/UX, SaaS, LMS, dashboard, responsive design, or design-system work with Ahmed Ali."},{property:"og:title",content:"Contact Ahmed Ali — Product Designer"},{property:"og:description",content:"Start a conversation about your product interface."},{property:"og:type",content:"website"},{name:"twitter:card",content:"summary_large_image"}]}),component:Contact});
+function Contact(){return <><PageIntro index="05" eyebrow="Contact" title="Start with the product problem."><p>Available for selected freelance and remote opportunities involving product design, interface systems, and responsive experiences.</p></PageIntro><ContactBlock/></>}

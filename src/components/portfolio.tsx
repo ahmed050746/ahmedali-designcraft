@@ -35,18 +35,12 @@ export function SectionHeading({ index, title, text }: { index: string; title: s
   return <div className="border-b border-line pb-6"><p className="eyebrow">{index}</p><h2 className="mt-3 font-serif text-3xl leading-tight sm:text-4xl">{title}</h2>{text && <p className="mt-3 max-w-[52ch] text-sm leading-6 text-ink-soft">{text}</p>}</div>;
 }
 
-const visualRows = ["w-4/5", "w-2/3", "w-11/12"];
 export function ProjectVisual({ project, large = false }: { project: Project; large?: boolean }) {
-  const isMobile = project.visual === "mobile";
-  return <div className={`project-visual relative overflow-hidden rounded-lg border border-visual-line bg-visual p-4 sm:p-6 ${large ? "aspect-[16/9]" : "aspect-[4/3]"}`}>
-    <div className="absolute inset-x-4 top-4 flex items-center justify-between font-mono text-[9px] uppercase tracking-[0.14em] text-visual-ink/55 sm:inset-x-6 sm:top-6"><span>{project.name}</span><span>{project.number} / 06</span></div>
-    <div className={`absolute inset-x-4 bottom-4 top-12 flex gap-3 sm:inset-x-6 sm:bottom-6 sm:top-14 ${isMobile ? "justify-center" : ""}`}>
-      {isMobile ? <><PhonePane/><PhonePane alt /></> : <><div className="hidden w-[20%] rounded bg-visual-panel p-3 md:block"><span className="block h-2 w-1/2 bg-visual-line"/><div className="mt-5 space-y-3">{visualRows.map((width) => <span key={width} className={`block h-1.5 ${width} bg-visual-line`}/>)}</div></div><div className="min-w-0 flex-1 rounded bg-visual-panel p-3 sm:p-4"><div className="grid grid-cols-3 gap-2"><span className="col-span-2 h-16 rounded bg-visual-soft sm:h-24"/><span className="h-16 rounded bg-visual-accent sm:h-24"/></div><div className="mt-3 grid grid-cols-3 gap-2">{[1,2,3].map((x) => <span key={x} className="h-10 rounded border border-visual-line bg-visual-panel sm:h-16"/>)}</div><div className="mt-3 h-2 w-3/5 bg-visual-line"/><div className="mt-2 h-2 w-4/5 bg-visual-soft"/></div></>}
-    </div>
+  return <div className={`project-visual relative overflow-hidden rounded-lg border border-visual-line bg-visual ${large ? "aspect-[16/9]" : "aspect-[4/3]"}`}>
+    <img src={project.imageSrc} alt={project.imageAlt} width={1600} height={large ? 900 : 1200} loading="lazy" className="h-full w-full object-cover" />
+    <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-ink/80 px-4 py-3 font-mono text-[9px] uppercase tracking-[0.14em] text-paper sm:px-6"><span>{project.name}</span><span>{project.number} / 06</span></div>
   </div>;
 }
-
-function PhonePane({ alt = false }: { alt?: boolean }) { return <div className={`h-full w-[38%] max-w-40 rounded-[18px] border-4 border-visual-ink/80 bg-visual-panel p-3 ${alt ? "translate-y-5" : ""}`}><span className="mx-auto block h-1 w-8 rounded bg-visual-line"/><span className="mt-5 block h-16 rounded bg-visual-accent"/><span className="mt-3 block h-2 w-2/3 bg-visual-line"/><span className="mt-2 block h-2 w-full bg-visual-soft"/></div> }
 
 export function ProjectGrid({ limit }: { limit?: number }) {
   return <div className="mt-10 grid gap-x-8 gap-y-14 md:grid-cols-12">{projects.slice(0, limit).map((project, index) => <article key={project.slug} className={`group ${index % 3 === 0 ? "md:col-span-7" : "md:col-span-5"}`}><Link to="/work/$slug" params={{ slug: project.slug }}><ProjectVisual project={project}/><div className="mt-5 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3"><div className="min-w-0"><h3 className="font-serif text-2xl">{project.name}</h3><p className="mt-1 font-mono text-[10px] uppercase tracking-[0.14em] text-ink-soft">{project.category}</p></div><ArrowUpRight className="mt-1 size-5 shrink-0 text-amber transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"/></div><p className="mt-3 max-w-[58ch] text-sm leading-6 text-ink-soft">{project.description}</p><p className="mt-3 font-mono text-[10px] uppercase tracking-[0.12em]">Role — {project.role}</p></Link></article>)}</div>;

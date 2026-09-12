@@ -12,6 +12,8 @@ export type Project = {
   approach: string;
   decisions: string[];
   visual: "learning" | "logistics" | "health" | "data" | "responsive" | "mobile";
+  imageSrc: string;
+  imageAlt: string;
 };
 
 export const projects: Project[] = [
@@ -29,6 +31,8 @@ export const projects: Project[] = [
     approach: "The work began with the system: shared navigation, clear information hierarchy, reusable patterns, and responsive behavior that could support new workflows as the platform evolved.",
     decisions: ["Keep frequent academic actions close to context.", "Use repeatable patterns across student and staff workflows.", "Treat mobile layouts as re-prioritized experiences, not compressed desktop screens."],
     visual: "learning",
+    imageSrc: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1600&q=85",
+    imageAlt: "Analytics dashboard displayed on a laptop screen for the EdBanz education platform",
   },
   {
     slug: "ipsilon",
@@ -44,6 +48,8 @@ export const projects: Project[] = [
     approach: "Selected flows were audited for hierarchy, spacing, component consistency, and responsive behavior before their interface treatment was refined.",
     decisions: ["Preserve existing product logic and feature scope.", "Create clearer distinction between primary and supporting information.", "Make dense operational views easier to scan at smaller widths."],
     visual: "logistics",
+    imageSrc: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1600&q=85",
+    imageAlt: "Product team reviewing a logistics marketplace workflow together",
   },
   {
     slug: "nhg-hospital-management",
@@ -59,6 +65,8 @@ export const projects: Project[] = [
     approach: "The selected screens were reorganized around task priority, stronger labels, calmer density, and consistent states across tables and summaries.",
     decisions: ["Use contrast sparingly to signal priority.", "Keep operational tables dense but legible.", "Expose status and context without adding visual noise."],
     visual: "health",
+    imageSrc: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1600&q=85",
+    imageAlt: "Healthcare professional using a tablet for hospital management work",
   },
   {
     slug: "dashboard-data-interfaces",
@@ -74,6 +82,8 @@ export const projects: Project[] = [
     approach: "Each exploration starts with the decision a screen needs to support, then organizes summary, comparison, detail, and action around that priority.",
     decisions: ["Lead with actionable summaries.", "Use tables for precision and charts for pattern recognition.", "Preserve context when layouts reorganize on mobile."],
     visual: "data",
+    imageSrc: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1600&q=85",
+    imageAlt: "Data infrastructure representing complex dashboard and analytics interfaces",
   },
   {
     slug: "responsive-interface-redesigns",
@@ -89,6 +99,8 @@ export const projects: Project[] = [
     approach: "Desktop patterns were re-evaluated by priority rather than scaled down, allowing content and controls to recompose for each breakpoint.",
     decisions: ["Reorder content around mobile task priority.", "Keep controls touch-friendly and labels visible.", "Test long content and compact widths early."],
     visual: "responsive",
+    imageSrc: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1600&q=85",
+    imageAlt: "Responsive website displayed on a developer workstation",
   },
   {
     slug: "mobile-product-interfaces",
@@ -104,6 +116,8 @@ export const projects: Project[] = [
     approach: "Flows are reduced to their essential decisions, with progressive disclosure and familiar interaction patterns used to control complexity.",
     decisions: ["Give each screen a clear primary task.", "Use progressive disclosure for secondary detail.", "Design empty, loading, and completed states as part of the flow."],
     visual: "mobile",
+    imageSrc: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1600&q=85",
+    imageAlt: "Mobile application interface displayed on a smartphone",
   },
 ];
 

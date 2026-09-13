@@ -174,6 +174,7 @@
 
   html { scroll-behavior: smooth; }
   a, button, input, textarea { outline-offset: 3px; }
+  :focus-visible { outline: 2px solid var(--amber); }
   ::selection { background: var(--amber); color: var(--primary-foreground); }
 }
 
@@ -181,7 +182,7 @@
   font-family: var(--font-mono);
   font-size: 0.6875rem;
   line-height: 1rem;
-  letter-spacing: 0.16em;
+  letter-spacing: 0;
   text-transform: uppercase;
   color: var(--amber);
 }
@@ -196,7 +197,7 @@
 @utility spec-label {
   font-family: var(--font-mono);
   font-size: 0.625rem;
-  letter-spacing: 0.14em;
+  letter-spacing: 0;
   text-transform: uppercase;
   color: var(--ink-soft);
 }
@@ -212,7 +213,7 @@
   display: block;
   font-family: var(--font-mono);
   font-size: 0.625rem;
-  letter-spacing: 0.14em;
+  letter-spacing: 0;
   text-transform: uppercase;
   color: color-mix(in oklab, var(--paper) 60%, transparent);
 }
@@ -225,8 +226,10 @@
   box-shadow: none;
 }
 
-.project-visual { transition: transform 500ms cubic-bezier(.2,.8,.2,1); }
-.group:hover .project-visual { transform: translateY(-3px); }
+.project-visual { transition: transform 500ms cubic-bezier(.2,.8,.2,1), border-color 300ms ease; }
+.group:hover .project-visual { transform: translateY(-4px); border-color: var(--amber); }
+.project-visual img { transition: transform 700ms cubic-bezier(.2,.8,.2,1); }
+.group:hover .project-visual img { transform: scale(1.015); }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

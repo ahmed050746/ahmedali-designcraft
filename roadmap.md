@@ -6,3 +6,4 @@
 - [x] Add responsive project visuals, design-system specimen, process, skills, and contact form feedback.
 - [x] Verify all routes, metadata, desktop/mobile layouts, navigation, and form behavior.
 - [x] Replace CSS-built image placeholders with responsive, accessible HTML images.
+- [x] Refine portfolio hierarchy, project scanning, navigation, and About presentation.

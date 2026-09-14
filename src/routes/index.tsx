@@ -17,7 +17,6 @@ export const Route = createFileRoute("/")({
 function HeroVisual() {
   return (
     <div className="relative">
-      <div className="absolute -right-8 -top-8 h-64 w-64 rounded-full bg-amber/15 blur-3xl" aria-hidden="true" />
       <div className="overflow-hidden rounded-2xl border border-line bg-paper-2 shadow-xl">
         <div className="aspect-[4/3]">
           <img

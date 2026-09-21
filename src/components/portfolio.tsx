@@ -1,10 +1,10 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Menu, X, ArrowUpRight, Check, Circle } from "lucide-react";
-import { useEffect, useState, type FormEvent, type ReactNode } from "react";
+import { Menu, X, ArrowUpRight, Circle } from "lucide-react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { projects, services, processSteps, type Project } from "@/lib/portfolio-data";
+import { cn } from "@/lib/utils";
 
 export const pageWrap = "mx-auto w-full max-w-[1200px] px-5 sm:px-8";
 
@@ -192,46 +192,150 @@ export function ProjectVisual({ project, large = false }: { project: Project; la
   );
 }
 
-export function ProjectGrid({ limit }: { limit?: number }) {
+function ArchiveArrow() {
   return (
-    <div className="mt-10 grid gap-x-8 gap-y-16 md:grid-cols-12">
-      {projects.slice(0, limit).map((project, index) => (
-        <article
-          key={project.slug}
-          className={`group ${index % 3 === 0 ? "md:col-span-7" : "md:col-span-5"}`}
-        >
-          <Link
-            to="/work/$slug"
-            params={{ slug: project.slug }}
-            className="block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber"
+    <span className="mt-1 grid size-9 shrink-0 place-items-center rounded-md border border-line text-ink transition-colors group-hover:border-amber group-hover:bg-amber group-hover:text-primary-foreground">
+      <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+    </span>
+  );
+}
+
+function ProjectCover({ project, featured = false }: { project: Project; featured?: boolean }) {
+  return (
+    <div
+      className={cn(
+        "relative overflow-hidden rounded-md bg-paper-2",
+        featured ? "aspect-[16/10]" : "aspect-[4/3]",
+      )}
+    >
+      <img
+        src={project.imageSrc}
+        alt={project.imageAlt}
+        width={1600}
+        height={featured ? 1000 : 1200}
+        loading="lazy"
+        className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+      />
+    </div>
+  );
+}
+
+function ProjectCopy({ project, featured = false }: { project: Project; featured?: boolean }) {
+  const tags = splitTokens(project.category);
+  return (
+    <>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-amber">
+            Project {project.number}
+          </p>
+          <h3
+            className={cn(
+              "mt-2 font-display leading-[1.04] text-ink",
+              featured ? "text-4xl sm:text-5xl lg:max-w-[10ch] lg:text-[3.25rem]" : "text-[1.75rem] sm:text-[1.9rem]",
+            )}
           >
-            <ProjectVisual project={project} />
-            <div className="mt-5 flex items-start justify-between gap-5 border-b border-line pb-4">
-              <div className="min-w-0">
-                <p className="font-mono text-[9px] uppercase text-amber">
-                  Project {project.number}
-                </p>
-                <h3 className="mt-2 font-serif text-2xl leading-tight sm:text-[1.7rem]">
-                  {project.name}
-                </h3>
+            {project.name}
+          </h3>
+        </div>
+        <ArchiveArrow />
+      </div>
+      <p className="mt-4 max-w-[54ch] text-sm leading-6 text-ink-soft">{project.description}</p>
+      <div className="mt-5 flex flex-wrap gap-1.5">
+        {tags.map((tag) => (
+          <span
+            key={tag}
+            className="rounded-full bg-paper-2 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.12em] text-ink-soft"
+          >
+            {tag}
+          </span>
+        ))}
+      </div>
+      <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.14em] text-ink-soft">
+        Role — <span className="text-ink">{project.role}</span>
+      </p>
+    </>
+  );
+}
+
+function FeaturedProject({ project, reversed = false }: { project: Project; reversed?: boolean }) {
+  return (
+    <article>
+      <Link
+        to="/work/$slug"
+        params={{ slug: project.slug }}
+        className="group grid items-center gap-8 py-12 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber sm:py-16 lg:grid-cols-12 lg:gap-12"
+      >
+        <div className={cn("lg:col-span-7", reversed && "lg:col-start-6")}>
+          <ProjectCover project={project} featured />
+        </div>
+        <div className={cn("lg:col-span-5", reversed && "lg:col-start-1 lg:row-start-1")}>
+          <ProjectCopy project={project} featured />
+        </div>
+      </Link>
+    </article>
+  );
+}
+
+function CompactProject({ project }: { project: Project }) {
+  return (
+    <article>
+      <Link
+        to="/work/$slug"
+        params={{ slug: project.slug }}
+        className="group block py-12 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber sm:py-16"
+      >
+        <ProjectCover project={project} />
+        <div className="mt-5">
+          <ProjectCopy project={project} />
+        </div>
+      </Link>
+    </article>
+  );
+}
+
+export function ProjectGrid({ limit }: { limit?: number }) {
+  const items = projects.slice(0, limit);
+  const rows: Array<{ type: "featured"; project: Project; reversed: boolean } | { type: "pair"; projects: Project[] }> =
+    [];
+
+  for (let i = 0, featuredIndex = 0; i < items.length; ) {
+    const featured = items[i];
+    if (!featured) break;
+    rows.push({ type: "featured", project: featured, reversed: featuredIndex % 2 === 1 });
+    featuredIndex += 1;
+    i += 1;
+    const pair = items.slice(i, i + 2);
+    if (pair.length) {
+      rows.push({ type: "pair", projects: pair });
+      i += pair.length;
+    }
+  }
+
+  return (
+    <div className="divide-y divide-line">
+      {rows.map((row) =>
+        row.type === "featured" ? (
+          <FeaturedProject key={row.project.slug} project={row.project} reversed={row.reversed} />
+        ) : (
+          <div
+            key={row.projects.map((project) => project.slug).join("-")}
+            className={cn(
+              "grid divide-y divide-line md:grid-cols-2 md:divide-y-0",
+              row.projects.length > 1 && "md:divide-x md:divide-line",
+            )}
+          >
+            {row.projects.map((project, index) => (
+              <div
+                key={project.slug}
+                className={cn(index === 0 ? "md:pr-8 lg:pr-12" : "md:pl-8 lg:pl-12")}
+              >
+                <CompactProject project={project} />
               </div>
-              <span className="mt-1 grid size-9 shrink-0 place-items-center border border-line transition-colors group-hover:border-amber group-hover:bg-amber group-hover:text-primary-foreground">
-                <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </span>
-            </div>
-            <div className="mt-4 grid gap-4 sm:grid-cols-[1fr_auto]">
-              <p className="max-w-[58ch] text-sm leading-6 text-ink-soft">{project.description}</p>
-              <dl className="min-w-28 font-mono text-[9px] uppercase">
-                <dt className="text-ink-soft">Scope</dt>
-                <dd className="mt-1 max-w-40">{project.category}</dd>
-              </dl>
-            </div>
-            <p className="mt-4 font-mono text-[9px] uppercase text-ink-soft">
-              Role — <span className="text-ink">{project.role}</span>
-            </p>
-          </Link>
-        </article>
-      ))}
+            ))}
+          </div>
+        ),
+      )}
     </div>
   );
 }
@@ -501,81 +605,37 @@ export function DesignSystemSpecimen() {
   );
 }
 
-export function ContactBlock({
-  includeForm = true,
-  index,
-}: {
-  includeForm?: boolean;
-  index?: string;
-}) {
-  const [sent, setSent] = useState(false);
-  function submit(event: FormEvent) {
-    event.preventDefault();
-    setSent(true);
-  }
+export function ContactBlock({ index }: { index?: string }) {
   return (
     <section className="bg-ink text-paper">
-      <div className={`${pageWrap} grid items-start gap-10 py-14 lg:grid-cols-12 lg:gap-12 lg:py-16`}>
-        <div className={includeForm ? "lg:col-span-6" : "lg:col-span-9"}>
-          <p className="eyebrow text-amber">{index ? `${index} / Contact` : "Contact"}</p>
-          <h2 className="mt-4 max-w-[16ch] font-serif text-3xl leading-tight sm:text-4xl">
-            Have a product that needs a better interface?
-          </h2>
-          <p className="mt-4 max-w-[42ch] text-sm leading-6 text-paper/65">
-            New products, interface improvements, or design systems — happy to talk.
-          </p>
-          <dl className="mt-8 grid gap-5 border-t border-paper/15 pt-5 font-mono text-[10px] uppercase sm:grid-cols-3">
-            <div>
-              <dt className="text-paper/45">Email</dt>
-              <dd className="mt-1 text-amber">hello@ahmedali.io</dd>
-            </div>
-            <div>
-              <dt className="text-paper/45">LinkedIn</dt>
-              <dd className="mt-1 text-amber">/in/ahmedali</dd>
-            </div>
-            <div>
-              <dt className="text-paper/45">Location</dt>
-              <dd className="mt-1 text-amber">Karachi, Pakistan</dd>
-            </div>
-          </dl>
-        </div>
-        {includeForm && (
-          <form
-            onSubmit={submit}
-            className="rounded-lg border border-paper/15 bg-paper/[0.03] p-5 sm:p-6 lg:col-span-6"
-          >
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div>
-                <label className="form-label">Name</label>
-                <Input required className="form-input" placeholder="Your name" />
-              </div>
-              <div>
-                <label className="form-label">Email</label>
-                <Input
-                  required
-                  type="email"
-                  className="form-input"
-                  placeholder="you@company.com"
-                />
-              </div>
-            </div>
-            <label className="form-label mt-4">Project / Message</label>
-            <Textarea
-              required
-              className="form-input min-h-24 resize-none"
-              placeholder="Tell me about the product..."
-            />
-            <Button type="submit" className="mt-4">
-              Send Message
-            </Button>
-            {sent && (
-              <p role="status" className="mt-3 flex gap-2 text-xs text-paper/70">
-                <Check className="size-4 text-amber" />
-                Thanks — I&apos;ll get back to you soon.
-              </p>
-            )}
-          </form>
-        )}
+      <div className={`${pageWrap} py-14 lg:py-16`}>
+        <p className="eyebrow text-amber">{index ? `${index} / Contact` : "Contact"}</p>
+        <h2 className="mt-4 max-w-[16ch] font-serif text-3xl leading-tight sm:text-4xl">
+          Have a product that needs a better interface?
+        </h2>
+        <p className="mt-4 max-w-[42ch] text-sm leading-6 text-paper/65">
+          New products, interface improvements, or design systems — happy to talk.
+        </p>
+        <dl className="mt-8 grid gap-5 border-t border-paper/15 pt-5 font-mono text-[10px] uppercase sm:grid-cols-2 lg:grid-cols-4">
+          <div>
+            <dt className="text-paper/45">Email</dt>
+            <dd className="mt-1 text-amber">hello@ahmedali.io</dd>
+          </div>
+          <div>
+            <dt className="text-paper/45">Phone</dt>
+            <dd className="mt-1 text-amber">
+              <a href="tel:+923321319363">+92332-1319363</a>
+            </dd>
+          </div>
+          <div>
+            <dt className="text-paper/45">LinkedIn</dt>
+            <dd className="mt-1 text-amber">/in/ahmedali</dd>
+          </div>
+          <div>
+            <dt className="text-paper/45">Location</dt>
+            <dd className="mt-1 text-amber">Karachi, Pakistan</dd>
+          </div>
+        </dl>
       </div>
     </section>
   );

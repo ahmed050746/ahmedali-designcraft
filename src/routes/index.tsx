@@ -1,13 +1,12 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Availability,
   ContactBlock,
   DesignSystemSpecimen,
   ProcessTimeline,
-  ProjectGrid,
   SectionHeading,
+  SelectedWorkSection,
   ServicesGrid,
   pageWrap,
 } from "@/components/portfolio";
@@ -77,7 +76,7 @@ function HomePage() {
             <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.22em] text-ink-soft">
               UI/UX Engineer · Karachi
             </p>
-            <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
+            <div className="mt-7 flex flex-wrap items-center justify-center gap-4">
               <Button asChild size="lg">
                 <Link to="/work">View work</Link>
               </Button>
@@ -90,21 +89,7 @@ function HomePage() {
         </div>
       </section>
 
-      <section id="selected-work" className="bg-paper">
-        <div className={`${pageWrap} py-20 sm:py-28`}>
-          <SectionHeading
-            index="01 / Index"
-            title="Selected Work"
-            text="A selection of interfaces, product experiences, and redesign work I've contributed to."
-          />
-          <ProjectGrid limit={4} />
-          <Button asChild variant="outline" className="mt-12">
-            <Link to="/work">
-              View all projects <ArrowRight />
-            </Link>
-          </Button>
-        </div>
-      </section>
+      <SelectedWorkSection />
 
       <DesignSystemSpecimen />
       <section className="bg-paper">

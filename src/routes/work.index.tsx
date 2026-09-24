@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PageIntro, ProjectGrid, pageWrap } from "@/components/portfolio";
 import { projects } from "@/lib/portfolio-data";
 
-const archiveTags = ["SaaS", "LMS", "Healthcare", "Dashboards", "Responsive", "Mobile"];
+const archiveTags = ["SaaS", "LMS", "Healthcare", "Dashboards", "Security", "Responsive", "Mobile"];
 export const Route = createFileRoute("/work/")({
   head: () => ({
     meta: [
@@ -29,8 +29,8 @@ function Work() {
         title="Products, systems, and interface redesigns."
       >
         <p>
-          Six focused project stories covering education, logistics, healthcare, dashboards,
-          responsive systems, and mobile experiences.
+          Seven focused project stories covering education, logistics, healthcare, dashboards,
+          home security, responsive systems, and mobile experiences.
         </p>
       </PageIntro>
       <section className="border-t border-line bg-paper">

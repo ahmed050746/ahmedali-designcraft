@@ -2,7 +2,6 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import {
   Availability,
-  ContactBlock,
   DesignSystemSpecimen,
   ProcessTimeline,
   SectionHeading,
@@ -125,7 +124,6 @@ function HomePage() {
           </div>
         </div>
       </section>
-      <ContactBlock index="06" />
     </>
   );
 }

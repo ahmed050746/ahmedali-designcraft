@@ -14,6 +14,14 @@ export type Project = {
   visual: "learning" | "logistics" | "health" | "data" | "responsive" | "mobile";
   imageSrc: string;
   imageAlt: string;
+  coverSrc?: string;
+  coverAlt?: string;
+  screensSrc?: string;
+  screensAlt?: string;
+  beforeSrc?: string;
+  beforeAlt?: string;
+  afterSrc?: string;
+  afterAlt?: string;
 };
 
 export const projects: Project[] = [
@@ -31,8 +39,12 @@ export const projects: Project[] = [
     approach: "The work began with the system: shared navigation, clear information hierarchy, reusable patterns, and responsive behavior that could support new workflows as the platform evolved.",
     decisions: ["Keep frequent academic actions close to context.", "Use repeatable patterns across student and staff workflows.", "Treat mobile layouts as re-prioritized experiences, not compressed desktop screens."],
     visual: "learning",
-    imageSrc: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1600&q=85",
-    imageAlt: "Analytics dashboard displayed on a laptop screen for the EdBanz education platform",
+    imageSrc: "/images/edbanz-case.webp",
+    coverSrc: "/images/edbanz-cover.webp",
+    screensSrc: "/images/edbanz-screens.webp",
+    imageAlt: "EdBanz AI Assistant screen with content creation, report generation, and classroom AI agents",
+    coverAlt: "EdBanz AI Assistant screen with content creation, report generation, and classroom AI agents",
+    screensAlt: "EdBanz Command Center dashboard showing live campus operations, attendance, and class monitoring",
   },
   {
     slug: "ipsilon",
@@ -48,8 +60,11 @@ export const projects: Project[] = [
     approach: "Selected flows were audited for hierarchy, spacing, component consistency, and responsive behavior before their interface treatment was refined.",
     decisions: ["Preserve existing product logic and feature scope.", "Create clearer distinction between primary and supporting information.", "Make dense operational views easier to scan at smaller widths."],
     visual: "logistics",
-    imageSrc: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1600&q=85",
-    imageAlt: "Product team reviewing a logistics marketplace workflow together",
+    imageSrc: "/images/ipsilon-case.webp",
+    coverSrc: "/images/ipsilon-cover.webp",
+    screensSrc: "/images/ipsilon-screens-2x.webp",
+    imageAlt: "Ipsilon landing page hero with transport quotes, delivery van, quote form, and key benefits",
+    screensAlt: "Ipsilon carrier profile for Mlado showing ratings, reviews, and trust details",
   },
   {
     slug: "nhg-hospital-management",
@@ -65,8 +80,12 @@ export const projects: Project[] = [
     approach: "The selected screens were reorganized around task priority, stronger labels, calmer density, and consistent states across tables and summaries.",
     decisions: ["Use contrast sparingly to signal priority.", "Keep operational tables dense but legible.", "Expose status and context without adding visual noise."],
     visual: "health",
-    imageSrc: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1600&q=85",
-    imageAlt: "Healthcare professional using a tablet for hospital management work",
+    imageSrc: "/images/nhg-cover.webp",
+    coverSrc: "/images/nhg-cover.webp",
+    screensSrc: "/images/nhg-screens.webp",
+    imageAlt: "Healthware form builder with add-field options for headings, text, and other input types",
+    coverAlt: "Healthware form builder with add-field options for headings, text, and other input types",
+    screensAlt: "Healthware add-field-type screen with rating, multiple choice, grid, and time fields",
   },
   {
     slug: "dashboard-data-interfaces",
@@ -82,29 +101,62 @@ export const projects: Project[] = [
     approach: "Each exploration starts with the decision a screen needs to support, then organizes summary, comparison, detail, and action around that priority.",
     decisions: ["Lead with actionable summaries.", "Use tables for precision and charts for pattern recognition.", "Preserve context when layouts reorganize on mobile."],
     visual: "data",
-    imageSrc: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1600&q=85",
-    imageAlt: "Data infrastructure representing complex dashboard and analytics interfaces",
+    imageSrc: "/images/dashboard-case.webp",
+    imageAlt: "EdBanz student dashboard with announcements, courses, calendar, and class schedule",
+    screensSrc: "/images/dashboard-screens.webp",
+    screensAlt: "EdBanz teacher reporting screen with attendance chart, marks distribution, and class leaderboard",
+  },
+  {
+    slug: "cctv",
+    number: "05",
+    name: "CCTV",
+    category: "Mobile · Security · App Store",
+    description: "Apple Store mockups for a home CCTV and access product — visitor management, guest activity, vehicle access, and household control as one mobile story.",
+    role: "UI/UX Designer · Product Designer",
+    contribution: "Designed App Store presentation mockups that place live product screens in device frames and pair each composition with one clear access job.",
+    platform: "iOS · Apple App Store",
+    scope: "App Store visual mockups for a home security and access-management product. The work focused on presentation, hierarchy, and feature storytelling rather than a full product build.",
+    challenge: "A security product has many jobs — visitors, vehicles, household access, and live activity. The store page has to explain that without looking like an operations dashboard.",
+    approach: "Each device frame carries one task. A calm brand field and short feature lines keep the screens readable at marketing scale while the UI stays close to the real product.",
+    decisions: [
+      "Give each mockup a single job so the store page can be scanned.",
+      "Keep product UI large enough to read inside the device frame.",
+      "Use a calm brand field so the phones, not decoration, carry the story.",
+    ],
+    visual: "mobile",
+    imageSrc: "/images/cctv-case.webp",
+    coverSrc: "/images/cctv-cover.webp",
+    imageAlt: "Apple Store mockups of a CCTV access app showing visitor, vehicle, and household control screens",
+    coverAlt: "Apple Store mockups of a CCTV access app showing visitor, vehicle, and household control screens",
   },
   {
     slug: "responsive-interface-redesigns",
-    number: "05",
+    number: "06",
     name: "Responsive Interface Redesigns",
     category: "Responsive Design · UI/UX",
-    description: "A collection of selected interface improvements where desktop experiences were adapted and refined for smaller screens.",
+    description: "Before and after of the Ipsilon carrier dashboard on a smaller screen — a denser quote list refined into a clearer status overview and empty state.",
     role: "UI/UX Engineer",
-    contribution: "Refined responsive layouts, component consistency, mobile usability, spacing, hierarchy, and interaction patterns.",
-    platform: "Desktop · Tablet · Mobile",
-    scope: "Selected responsive improvements across interface concepts.",
-    challenge: "Protect task clarity and visual hierarchy when space, input method, and user context change.",
-    approach: "Desktop patterns were re-evaluated by priority rather than scaled down, allowing content and controls to recompose for each breakpoint.",
-    decisions: ["Reorder content around mobile task priority.", "Keep controls touch-friendly and labels visible.", "Test long content and compact widths early."],
+    contribution: "Refined the mobile carrier dashboard for hierarchy, scanning, and empty-state clarity while keeping the same product jobs.",
+    platform: "Mobile · Responsive web",
+    scope: "A selected before-and-after of the Ipsilon carrier dashboard on smaller screens, not a complete product redesign.",
+    challenge: "Protect quote status, earnings, and next actions when the layout has less space and more competing copy.",
+    approach: "The existing mobile screen was audited for density and priority, then recomposed so status comes first and empty states explain the next step.",
+    decisions: ["Lead with counts and earnings instead of long instructional copy.", "Make Browse Listings the primary action in both loaded and empty states.", "Keep awaiting, active, and delivered jobs as a simple status set."],
     visual: "responsive",
-    imageSrc: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1600&q=85",
-    imageAlt: "Responsive website displayed on a developer workstation",
+    imageSrc: "/images/responsive-after.webp",
+    imageAlt: "Ipsilon carrier dashboard after the responsive redesign, with clearer stats and an empty quote state",
+    coverSrc: "/images/responsive-after.webp",
+    coverAlt: "Ipsilon carrier dashboard after the responsive redesign, with clearer stats and an empty quote state",
+    screensSrc: "/images/responsive-after.webp",
+    screensAlt: "Ipsilon carrier dashboard after the responsive redesign, with clearer stats and an empty quote state",
+    beforeSrc: "/images/responsive-before.webp",
+    beforeAlt: "Ipsilon carrier dashboard before the redesign, with dense instructional copy and a quote list",
+    afterSrc: "/images/responsive-after.webp",
+    afterAlt: "Ipsilon carrier dashboard after the responsive redesign, with clearer stats and an empty quote state",
   },
   {
     slug: "mobile-product-interfaces",
-    number: "06",
+    number: "07",
     name: "Mobile Product Interfaces",
     category: "Mobile App · UI/UX",
     description: "Selected mobile application screens and interface explorations created with a focus on usability, visual clarity, and platform-appropriate interaction patterns.",
@@ -120,6 +172,29 @@ export const projects: Project[] = [
     imageAlt: "Mobile application interface displayed on a smartphone",
   },
 ];
+
+export const contactMethods = [
+  {
+    label: "Email",
+    value: "hello@ahmedali.io",
+    href: "mailto:hello@ahmedali.io",
+  },
+  {
+    label: "Phone",
+    value: "+92332-1319363",
+    href: "tel:+923321319363",
+  },
+  {
+    label: "LinkedIn",
+    value: "/in/ahmedali",
+    href: "https://www.linkedin.com/in/ahmedali",
+    external: true,
+  },
+  {
+    label: "Location",
+    value: "Karachi, Pakistan",
+  },
+] as const;
 
 export const services = [
   ["Product & UI/UX Design", "Designing interfaces for SaaS platforms, web applications, dashboards, LMS products, and digital products."],

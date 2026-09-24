@@ -1,9 +1,9 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Menu, X, ArrowUpRight, Circle } from "lucide-react";
+import { Menu, X, ArrowUpRight, Circle, Mail, Phone, Linkedin, MapPin } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { projects, services, processSteps, type Project } from "@/lib/portfolio-data";
+import { contactMethods, projects, services, processSteps, type Project } from "@/lib/portfolio-data";
 import { cn } from "@/lib/utils";
 
 export const pageWrap = "mx-auto w-full max-w-[1200px] px-5 sm:px-8";
@@ -171,23 +171,89 @@ export function SectionHeading({
   );
 }
 
-export function ProjectVisual({ project, large = false }: { project: Project; large?: boolean }) {
+function BeforeAfterPair({
+  project,
+  compact = false,
+}: {
+  project: Project;
+  compact?: boolean;
+}) {
+  if (!project.beforeSrc || !project.afterSrc) return null;
+  const frames = [
+    ["Before", project.beforeSrc, project.beforeAlt ?? "Before"],
+    ["After", project.afterSrc, project.afterAlt ?? "After"],
+  ] as const;
+
   return (
     <div
-      className={`project-visual relative overflow-hidden rounded-lg border border-visual-line bg-visual ${large ? "aspect-[16/9]" : "aspect-[4/3]"}`}
+      className={cn(
+        "grid h-full grid-cols-2 bg-paper-2",
+        compact ? "gap-2.5 p-2.5 sm:gap-3 sm:p-3" : "gap-4 p-4 sm:gap-5 sm:p-5",
+      )}
     >
-      <img
-        src={project.imageSrc}
-        alt={project.imageAlt}
-        width={1600}
-        height={large ? 900 : 1200}
-        loading="lazy"
-        className="h-full w-full object-cover"
-      />
-      <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-ink/80 px-4 py-3 font-mono text-[9px] uppercase tracking-[0.14em] text-paper sm:px-6">
-        <span>{project.name}</span>
-        <span>{project.number} / 06</span>
-      </div>
+      {frames.map(([label, src, alt]) => (
+        <figure key={label} className={cn("flex min-w-0 flex-col", compact && "h-full")}>
+          <figcaption
+            className={cn(
+              "mb-2 font-mono uppercase tracking-[0.14em]",
+              compact ? "text-[9px]" : "text-[10px]",
+              label === "After" ? "text-amber" : "text-ink-soft",
+            )}
+          >
+            {label}
+          </figcaption>
+          <div
+            className={cn(
+              "relative overflow-hidden rounded-lg border bg-paper",
+              compact && "min-h-0 flex-1",
+              label === "After" ? "border-amber/45" : "border-line",
+            )}
+          >
+            <img
+              src={src}
+              alt={alt}
+              width={800}
+              height={1600}
+              loading="lazy"
+              className={
+                compact
+                  ? "absolute inset-0 h-full w-full object-cover object-top"
+                  : "block h-auto w-full"
+              }
+            />
+          </div>
+        </figure>
+      ))}
+    </div>
+  );
+}
+
+export function ProjectVisual({ project, large = false }: { project: Project; large?: boolean }) {
+  const comparison = Boolean(project.beforeSrc && project.afterSrc);
+  const src = large ? project.imageSrc : (project.screensSrc ?? projectCoverSrc(project));
+  const alt = large ? project.imageAlt : (project.screensAlt ?? project.imageAlt);
+  return (
+    <div className="project-visual relative overflow-hidden rounded-lg border border-visual-line bg-paper">
+      {comparison && large ? (
+        <BeforeAfterPair project={project} />
+      ) : (
+        <>
+          <img
+            src={src}
+            alt={alt}
+            width={1600}
+            height={large ? 900 : 1200}
+            loading="lazy"
+            className="block h-auto w-full"
+          />
+          <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-ink/80 px-4 py-3 font-mono text-[9px] uppercase tracking-[0.14em] text-paper sm:px-6">
+            <span>{project.name}</span>
+            <span>
+              {project.number} / {String(projects.length).padStart(2, "0")}
+            </span>
+          </div>
+        </>
+      )}
     </div>
   );
 }
@@ -201,21 +267,32 @@ function ArchiveArrow() {
 }
 
 function ProjectCover({ project, featured = false }: { project: Project; featured?: boolean }) {
+  const comparison = Boolean(project.beforeSrc && project.afterSrc);
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-md bg-paper-2",
-        featured ? "aspect-[16/10]" : "aspect-[4/3]",
+        "relative overflow-hidden rounded-md border border-line bg-paper-2",
+        comparison
+          ? featured
+            ? "aspect-[5/4]"
+            : "aspect-square"
+          : featured
+            ? "aspect-[16/10]"
+            : "aspect-[4/3]",
       )}
     >
-      <img
-        src={project.imageSrc}
-        alt={project.imageAlt}
-        width={1600}
-        height={featured ? 1000 : 1200}
-        loading="lazy"
-        className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-      />
+      {comparison ? (
+        <BeforeAfterPair project={project} compact />
+      ) : (
+        <img
+          src={projectCoverSrc(project)}
+          alt={projectCoverAlt(project)}
+          width={1600}
+          height={featured ? 1000 : 1200}
+          loading="lazy"
+          className="h-full w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+        />
+      )}
     </div>
   );
 }
@@ -344,8 +421,16 @@ function splitTokens(value: string) {
   return value.split("·").map((token) => token.trim()).filter(Boolean);
 }
 
+function projectCoverSrc(project: Project) {
+  return project.coverSrc ?? project.imageSrc;
+}
+
+function projectCoverAlt(project: Project) {
+  return project.coverAlt ?? project.imageAlt;
+}
+
 export function SelectedWorkSection() {
-  const items = projects.slice(0, 4);
+  const items = projects.slice(0, 5);
   return (
     <section id="selected-work" className="bg-paper">
       <div className={`${pageWrap} pb-12 pt-8 sm:pb-20 sm:pt-12 lg:pb-24 lg:pt-16`}>
@@ -401,12 +486,12 @@ export function SelectedWorkSection() {
                   </h3>
                   <div className="relative mt-5 overflow-hidden rounded-xl">
                     <img
-                      src={project.imageSrc}
-                      alt={project.imageAlt}
+                      src={projectCoverSrc(project)}
+                      alt={projectCoverAlt(project)}
                       width={1600}
                       height={1000}
                       loading="lazy"
-                      className="aspect-[5/4] h-auto w-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+                      className="aspect-[5/4] h-auto w-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.02]"
                     />
                     <p className="pointer-events-none absolute inset-x-0 bottom-0 truncate bg-gradient-to-t from-ink/65 to-transparent px-4 pb-3 pt-10 font-mono text-[9px] uppercase tracking-[0.14em] text-paper">
                       {project.name} · {tags[0]}
@@ -457,12 +542,12 @@ export function SelectedWorkSection() {
 
                   <div className="relative overflow-hidden rounded-md lg:col-span-6 lg:col-start-4 lg:row-start-1">
                     <img
-                      src={project.imageSrc}
-                      alt={project.imageAlt}
+                      src={projectCoverSrc(project)}
+                      alt={projectCoverAlt(project)}
                       width={1600}
                       height={720}
                       loading="lazy"
-                      className="aspect-[2.35/1] h-auto w-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+                      className="aspect-[2.35/1] h-auto w-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.02]"
                     />
                     <p className="pointer-events-none absolute inset-x-0 bottom-0 truncate bg-gradient-to-t from-ink/70 to-transparent px-4 pb-3 pt-10 font-mono text-[9px] uppercase tracking-[0.16em] text-paper">
                       {project.name} · {tags[0]}
@@ -605,39 +690,91 @@ export function DesignSystemSpecimen() {
   );
 }
 
-export function ContactBlock({ index }: { index?: string }) {
+const contactIcons = {
+  Email: Mail,
+  Phone: Phone,
+  LinkedIn: Linkedin,
+  Location: MapPin,
+} as const;
+
+export function ContactMethods({
+  tone = "paper",
+  size = "strip",
+}: {
+  tone?: "paper" | "ink";
+  size?: "strip" | "cards";
+}) {
+  const onInk = tone === "ink";
+  const cards = size === "cards";
+
   return (
-    <section className="bg-ink text-paper">
-      <div className={`${pageWrap} py-14 lg:py-16`}>
-        <p className="eyebrow text-amber">{index ? `${index} / Contact` : "Contact"}</p>
-        <h2 className="mt-4 max-w-[16ch] font-serif text-3xl leading-tight sm:text-4xl">
-          Have a product that needs a better interface?
-        </h2>
-        <p className="mt-4 max-w-[42ch] text-sm leading-6 text-paper/65">
-          New products, interface improvements, or design systems — happy to talk.
-        </p>
-        <dl className="mt-8 grid gap-5 border-t border-paper/15 pt-5 font-mono text-[10px] uppercase sm:grid-cols-2 lg:grid-cols-4">
-          <div>
-            <dt className="text-paper/45">Email</dt>
-            <dd className="mt-1 text-amber">hello@ahmedali.io</dd>
-          </div>
-          <div>
-            <dt className="text-paper/45">Phone</dt>
-            <dd className="mt-1 text-amber">
-              <a href="tel:+923321319363">+92332-1319363</a>
-            </dd>
-          </div>
-          <div>
-            <dt className="text-paper/45">LinkedIn</dt>
-            <dd className="mt-1 text-amber">/in/ahmedali</dd>
-          </div>
-          <div>
-            <dt className="text-paper/45">Location</dt>
-            <dd className="mt-1 text-amber">Karachi, Pakistan</dd>
-          </div>
-        </dl>
-      </div>
-    </section>
+    <ul
+      className={cn(
+        "grid gap-px overflow-hidden",
+        cards ? "rounded-lg bg-line sm:grid-cols-2" : "rounded-lg sm:grid-cols-2 lg:grid-cols-4",
+        onInk ? "bg-paper/15" : "bg-line",
+      )}
+    >
+      {contactMethods.map((item) => {
+        const Icon = contactIcons[item.label];
+        const className = cn(
+          "group flex h-full transition-colors",
+          cards ? "flex-col gap-8 p-6 sm:p-7" : "items-center gap-3 p-4 sm:p-5",
+          onInk ? "bg-ink hover:bg-paper/5" : "bg-paper hover:bg-paper-2",
+        );
+        const body = (
+          <>
+            <span
+              className={cn(
+                "grid shrink-0 place-items-center rounded-md border",
+                cards ? "size-10" : "size-8",
+                onInk ? "border-paper/20 text-amber" : "border-line text-amber",
+              )}
+            >
+              <Icon className={cards ? "size-4" : "size-3.5"} />
+            </span>
+            <span className="min-w-0 flex-1">
+              <span
+                className={cn(
+                  "block font-mono text-[10px] uppercase tracking-[0.14em]",
+                  onInk ? "text-paper/45" : "text-ink-soft",
+                )}
+              >
+                {item.label}
+              </span>
+              <span
+                className={cn(
+                  "mt-1 block font-sans font-medium",
+                  cards ? "text-lg sm:text-xl" : "truncate text-sm",
+                  onInk ? "text-paper" : "text-ink",
+                  "href" in item && "group-hover:text-amber",
+                )}
+              >
+                {item.value}
+              </span>
+            </span>
+          </>
+        );
+
+        return (
+          <li key={item.label}>
+            {"href" in item ? (
+              <a
+                href={item.href}
+                className={className}
+                {...("external" in item && item.external
+                  ? { target: "_blank", rel: "noreferrer" }
+                  : {})}
+              >
+                {body}
+              </a>
+            ) : (
+              <div className={className}>{body}</div>
+            )}
+          </li>
+        );
+      })}
+    </ul>
   );
 }
 

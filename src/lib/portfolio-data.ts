@@ -170,8 +170,8 @@ export const projects: Project[] = [
     approach: "Flows are reduced to their essential decisions, with progressive disclosure and familiar interaction patterns used to control complexity.",
     decisions: ["Give each screen a clear primary task.", "Use progressive disclosure for secondary detail.", "Design empty, loading, and completed states as part of the flow."],
     visual: "mobile",
-    imageSrc: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1600&q=85",
-    imageAlt: "Mobile application interface displayed on a smartphone",
+    imageSrc: "/images/mobile-product-cover.png",
+    imageAlt: "Ipsilon carrier dashboard on dual gold iPhone mockups showing delivered jobs and quote stats",
   },
 ];
 

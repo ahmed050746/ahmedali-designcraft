@@ -1,6 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { Menu, X, ArrowUpRight, Circle, Mail, Phone, Linkedin, MapPin } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
+import { ImageLightbox } from "@/components/image-lightbox";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { contactMethods, projects, services, processSteps, type Project } from "@/lib/portfolio-data";
@@ -229,32 +230,68 @@ function BeforeAfterPair({
 }
 
 export function ProjectVisual({ project, large = false }: { project: Project; large?: boolean }) {
+  const [lightboxOpen, setLightboxOpen] = useState(false);
   const comparison = Boolean(project.beforeSrc && project.afterSrc);
   const src = large ? project.imageSrc : (project.screensSrc ?? projectCoverSrc(project));
   const alt = large ? project.imageAlt : (project.screensAlt ?? project.imageAlt);
+  const canLightbox = !(comparison && large);
+
   return (
-    <div className="project-visual relative overflow-hidden rounded-lg border border-visual-line bg-paper">
-      {comparison && large ? (
-        <BeforeAfterPair project={project} />
-      ) : (
-        <>
-          <img
-            src={src}
-            alt={alt}
-            width={1600}
-            height={large ? 900 : 1200}
-            loading="lazy"
-            className="block h-auto w-full"
-          />
-          <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-ink/80 px-4 py-3 font-mono text-[9px] uppercase tracking-[0.14em] text-paper sm:px-6">
-            <span>{project.name}</span>
-            <span>
-              {project.number} / {String(projects.length).padStart(2, "0")}
-            </span>
-          </div>
-        </>
+    <>
+      <div className="project-visual relative overflow-hidden rounded-lg border border-visual-line bg-paper">
+        {comparison && large ? (
+          <BeforeAfterPair project={project} />
+        ) : (
+          <>
+            {canLightbox ? (
+              <button
+                type="button"
+                onClick={() => setLightboxOpen(true)}
+                className="group/visual relative block w-full cursor-zoom-in text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber"
+                aria-label={`View full ${project.name} image`}
+              >
+                <img
+                  src={src}
+                  alt={alt}
+                  loading="lazy"
+                  decoding="async"
+                  className={cn(
+                    "h-auto w-full transition-transform duration-500 group-hover/visual:scale-[1.01]",
+                    large && "aspect-[16/9] object-cover object-top",
+                  )}
+                  style={{ imageRendering: "auto" }}
+                />
+              </button>
+            ) : (
+              <img
+                src={src}
+                alt={alt}
+                width={1600}
+                height={large ? 900 : 1200}
+                loading="lazy"
+                className="block h-auto w-full"
+              />
+            )}
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-center justify-between bg-ink/80 px-4 py-3 font-mono text-[9px] uppercase tracking-[0.14em] text-paper sm:px-6">
+              <span>{project.name}</span>
+              <span>
+                {project.number} / {String(projects.length).padStart(2, "0")}
+              </span>
+            </div>
+          </>
+        )}
+      </div>
+
+      {canLightbox && (
+        <ImageLightbox
+          open={lightboxOpen}
+          onOpenChange={setLightboxOpen}
+          src={src}
+          alt={alt}
+          title={project.name}
+        />
       )}
-    </div>
+    </>
   );
 }
 

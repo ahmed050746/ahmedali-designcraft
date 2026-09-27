@@ -18,6 +18,7 @@ export type Project = {
   coverAlt?: string;
   screensSrc?: string;
   screensAlt?: string;
+  screensNote?: string;
   beforeSrc?: string;
   beforeAlt?: string;
   afterSrc?: string;
@@ -30,7 +31,7 @@ export const projects: Project[] = [
     number: "01",
     name: "EdBanz",
     category: "SaaS · LMS · EdTech · Product Design",
-    description: "An AI-powered connected education platform designed to bring teaching, learning, academic operations, and student management into one unified ecosystem.",
+    description: "An AI-powered connected education platform unifying teaching, learning, and academic operations—featuring specialized AI agents for automated reporting and content creation.",
     role: "UI/UX Engineer · Product Designer",
     contribution: "Designed the product experience from the ground up, including major platform interfaces, dashboards, virtual classroom experiences, academic workflows, and responsive layouts.",
     platform: "Responsive web platform",
@@ -40,11 +41,12 @@ export const projects: Project[] = [
     decisions: ["Keep frequent academic actions close to context.", "Use repeatable patterns across student and staff workflows.", "Treat mobile layouts as re-prioritized experiences, not compressed desktop screens."],
     visual: "learning",
     imageSrc: "/images/edbanz-case.png",
-    coverSrc: "/images/edbanz-cover.webp",
+    coverSrc: "/images/edbanz-cover.png",
     screensSrc: "/images/edbanz-screens.png",
-    imageAlt: "EdBanz AI Assistant screen with content creation, report generation, and classroom AI agents",
-    coverAlt: "EdBanz AI Assistant screen with content creation, report generation, and classroom AI agents",
+    imageAlt: "EdBanz AI Assistance and Specialized Agents screen with content creation, report generation, and classroom AI agents",
+    coverAlt: "EdBanz AI Assistance and Specialized Agents screen with content creation, report generation, and classroom AI agents",
     screensAlt: "EdBanz AI content generation workflow from prompt configuration to generated quiz outputs",
+    screensNote: "A step-by-step preview of the AI Content Generation Workflow—showing how educators move seamlessly from prompt setup to instantly generated assessments and lesson plans.",
   },
   {
     slug: "ipsilon",
@@ -65,13 +67,14 @@ export const projects: Project[] = [
     screensSrc: "/images/ipsilon-screens.png",
     imageAlt: "Ipsilon landing page hero with transport quotes, delivery van, quote form, and key benefits",
     screensAlt: "Ipsilon carrier dashboard UI redesign showing before and after mobile layouts",
+    screensNote: "A side-by-side comparison of the Carrier Dashboard redesign—improving information density, status visibility, and quote tracking for logistics providers.",
   },
   {
     slug: "nhg-hospital-management",
     number: "03",
     name: "NHG Hospital Management System",
     category: "Healthcare · Dashboard · SaaS",
-    description: "A hospital management platform containing complex operational workflows and data-heavy interfaces.",
+    description: "A hospital management platform featuring targeted UI redesigns—such as the Form Builder modal—to simplify complex operational workflows and data-heavy interfaces.",
     role: "UI/UX Designer",
     contribution: "Redesigned selected features and screens to improve usability, hierarchy, visual consistency, and responsive presentation.",
     platform: "Responsive web application",
@@ -86,13 +89,14 @@ export const projects: Project[] = [
     imageAlt: "Healthware form builder modal redesign showing before and after add-field UI",
     coverAlt: "Healthware form builder modal redesign showing before and after add-field UI",
     screensAlt: "Healthware field selection component redesign showing before and after add-field modal",
+    screensNote: "A before-and-after breakdown of the Field Selection component—redesigning complex modal interactions to improve visual hierarchy and selection clarity for clinical staff.",
   },
   {
     slug: "dashboard-data-interfaces",
     number: "04",
     name: "Dashboard & Data Interfaces",
     category: "Dashboard · SaaS · Data Visualization",
-    description: "Selected dashboard and data-heavy interface explorations focused on clarity, hierarchy, responsive behavior, and efficient information presentation.",
+    description: "Centralized dashboard organizing announcements, class schedules, course activities, and academic metrics seamlessly.",
     role: "UI/UX Engineer",
     contribution: "Explored information architecture, visual hierarchy, chart framing, tables, filtering patterns, and responsive states across selected dashboard concepts.",
     platform: "Responsive web dashboards",
@@ -105,6 +109,7 @@ export const projects: Project[] = [
     imageAlt: "EdBanz unified teacher dashboard with announcements, courses, calendar, and class schedule",
     screensSrc: "/images/dashboard-screens.png",
     screensAlt: "EdBanz responsive dashboard architecture showing desktop and mobile layouts",
+    screensNote: "Demonstrating how complex dashboard components—such as active schedules, announcements, and calendars—adapt responsively from desktop interfaces to streamlined mobile layouts.",
   },
   {
     slug: "cctv",
@@ -130,6 +135,7 @@ export const projects: Project[] = [
     imageAlt: "App Store screenshots suite for Faircape Security access control and visitor features",
     coverAlt: "App Store screenshots suite for Faircape Security access control and visitor features",
     screensAlt: "App Store screenshot mockup for Faircape Security household access control",
+    screensNote: "A close-up view of the App Store screenshot mockups—highlighting household access control features, readable in-frame UI, and clear feature headlines.",
   },
   {
     slug: "responsive-interface-redesigns",

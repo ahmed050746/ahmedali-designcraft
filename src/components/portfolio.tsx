@@ -12,14 +12,15 @@ export const pageWrap = "mx-auto w-full max-w-[1200px] px-5 sm:px-8";
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const pathname = useRouterState({ select: (state) => state.location.pathname });
-  useEffect(() => setOpen(false), [pathname]);
+  const hash = useRouterState({ select: (state) => state.location.hash });
+  useEffect(() => setOpen(false), [pathname, hash]);
   const nav = [
-    ["Work", "/work"],
-    ["About", "/about"],
-    ["Services", "/services"],
-    ["Insights", "/insights"],
-    ["Contact", "/contact"],
-  ] as const;
+    { label: "Work", to: "/" as const },
+    { label: "About", to: "/about" as const },
+    { label: "Services", to: "/services" as const },
+    { label: "Insights", to: "/insights" as const },
+    { label: "Contact", to: "/contact" as const },
+  ];
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-line bg-paper/95 backdrop-blur-sm">
       <div className={`${pageWrap} grid h-16 grid-cols-[minmax(0,1fr)_auto] items-center gap-4`}>
@@ -41,16 +42,27 @@ export function SiteHeader() {
           </span>
         </Link>
         <nav className="hidden h-full items-center gap-7 md:flex" aria-label="Primary navigation">
-          {nav.map(([label, to]) => (
-            <Link
-              key={to}
-              to={to}
-              className="relative flex h-full items-center font-mono text-[10px] uppercase text-ink-soft transition-colors after:absolute after:inset-x-0 after:bottom-0 after:h-px after:origin-left after:scale-x-0 after:bg-amber after:transition-transform hover:text-ink hover:after:scale-x-100"
-              activeProps={{ className: "text-ink after:scale-x-100" }}
-            >
-              {label}
-            </Link>
-          ))}
+          {nav.map((item) => {
+            const isWork = item.label === "Work";
+            const workActive =
+              hash === "selected-work" ||
+              hash === "#selected-work" ||
+              pathname.startsWith("/work/");
+            return (
+              <Link
+                key={item.label}
+                to={item.to}
+                {...(isWork ? { hash: "selected-work" as const } : {})}
+                {...(isWork ? {} : { activeProps: { className: "text-ink after:scale-x-100" } })}
+                className={cn(
+                  "relative flex h-full items-center font-mono text-[10px] uppercase text-ink-soft transition-colors after:absolute after:inset-x-0 after:bottom-0 after:h-px after:origin-left after:scale-x-0 after:bg-amber after:transition-transform hover:text-ink hover:after:scale-x-100",
+                  isWork && workActive && "text-ink after:scale-x-100",
+                )}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
           <Button asChild size="sm">
             <Link to="/contact">
               Let&apos;s Talk <ArrowUpRight />
@@ -72,18 +84,29 @@ export function SiteHeader() {
           className={`${pageWrap} border-t border-line bg-paper py-3 md:hidden`}
           aria-label="Mobile navigation"
         >
-          {nav.map(([label, to], index) => (
-            <Link
-              key={to}
-              to={to}
-              className="grid grid-cols-[2rem_1fr_auto] items-center border-b border-line py-3.5 font-mono text-xs uppercase last:border-0"
-              activeProps={{ className: "text-amber" }}
-            >
-              <span className="text-[9px] text-ink-soft">0{index + 1}</span>
-              <span>{label}</span>
-              <ArrowUpRight className="size-3.5" />
-            </Link>
-          ))}
+          {nav.map((item, index) => {
+            const isWork = item.label === "Work";
+            const workActive =
+              hash === "selected-work" ||
+              hash === "#selected-work" ||
+              pathname.startsWith("/work/");
+            return (
+              <Link
+                key={item.label}
+                to={item.to}
+                {...(isWork ? { hash: "selected-work" as const } : {})}
+                {...(isWork ? {} : { activeProps: { className: "text-amber" } })}
+                className={cn(
+                  "grid grid-cols-[2rem_1fr_auto] items-center border-b border-line py-3.5 font-mono text-xs uppercase last:border-0",
+                  isWork && workActive && "text-amber",
+                )}
+              >
+                <span className="text-[9px] text-ink-soft">0{index + 1}</span>
+                <span>{item.label}</span>
+                <ArrowUpRight className="size-3.5" />
+              </Link>
+            );
+          })}
         </nav>
       )}
     </header>
@@ -102,7 +125,7 @@ export function SiteFooter() {
             </p>
           </div>
           <nav className="flex flex-wrap gap-x-6 gap-y-3 font-mono text-[10px] uppercase tracking-[0.14em] text-paper/55">
-            <Link to="/work" className="transition-colors hover:text-paper">
+            <Link to="/" hash="selected-work" className="transition-colors hover:text-paper">
               Work
             </Link>
             <Link to="/about" className="transition-colors hover:text-paper">
@@ -469,7 +492,7 @@ function projectCoverAlt(project: Project) {
 export function SelectedWorkSection() {
   const items = projects.slice(0, 5);
   return (
-    <section id="selected-work" className="bg-paper">
+    <section id="selected-work" className="scroll-mt-16 bg-paper">
       <div className={`${pageWrap} pb-12 pt-8 sm:pb-20 sm:pt-12 lg:pb-24 lg:pt-16`}>
         <div className="grid items-start gap-8 border-b border-line pb-8 sm:pb-12 lg:grid-cols-12 lg:gap-16 lg:pb-16">
           <div className="lg:col-span-7">
@@ -566,7 +589,7 @@ export function SelectedWorkSection() {
                 <Link
                   to="/work/$slug"
                   params={{ slug: project.slug }}
-                  className="group hidden items-start gap-x-8 py-10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber lg:grid lg:grid-cols-12 lg:grid-rows-[auto_auto]"
+                  className="group hidden items-start gap-x-8 gap-y-5 py-10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber lg:grid lg:grid-cols-12 lg:grid-rows-[auto_auto]"
                 >
                   <div className="lg:col-span-3 lg:row-start-1 lg:pr-2">
                     <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[oklab(0.59_0.141842_0.110819_/_0.9)]">
@@ -640,7 +663,7 @@ export function SelectedWorkSection() {
             size="sm"
             className="shrink-0 rounded-full bg-ink px-4 text-paper hover:bg-ink hover:text-paper"
           >
-            <Link to="/work">
+            <Link to="/" hash="selected-work">
               View all <ArrowUpRight className="size-3.5" />
             </Link>
           </Button>

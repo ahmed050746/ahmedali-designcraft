@@ -10,6 +10,7 @@ import {
   pageWrap,
 } from "@/components/portfolio";
 import { insights } from "@/lib/portfolio-data";
+import ahmedHero from "@/assets/hero-portrait.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -34,15 +35,25 @@ export const Route = createFileRoute("/")({
 
 function HeroVisual() {
   return (
-    <div className="relative mx-auto mt-10 w-56 sm:mt-12 sm:w-72">
-      <div className="aspect-square overflow-hidden bg-paper-2">
+    <div className="relative mx-auto mt-2 w-full max-w-[360px] sm:mt-3 sm:max-w-[480px] lg:max-w-[560px]">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute left-1/2 top-[18%] h-[70%] w-[85%] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,color-mix(in_oklab,var(--amber)_16%,transparent),transparent_70%)] blur-2xl"
+      />
+      <div
+        className="relative overflow-hidden"
+        style={{
+          maskImage: "linear-gradient(to bottom, black 85%, transparent 100%)",
+          WebkitMaskImage: "linear-gradient(to bottom, black 85%, transparent 100%)",
+        }}
+      >
         <img
-          src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=900&q=85"
-          alt="Temporary black-and-white editorial portrait for Ahmed Ali"
-          width={900}
-          height={900}
+          src={ahmedHero}
+          alt="Ahmed Ali, UI/UX Engineer"
+          width={1600}
+          height={1152}
           fetchPriority="high"
-          className="h-full w-full object-cover object-[center_18%] grayscale"
+          className="relative mx-auto h-auto w-full object-contain object-bottom"
         />
       </div>
     </div>
@@ -65,26 +76,28 @@ function HomePage() {
           }}
         />
         <div
-          className={`${pageWrap} relative flex min-h-[calc(100svh-4rem)] flex-col items-center justify-center py-16 text-center`}
+          className={`${pageWrap} relative flex min-h-[calc(100svh-4rem)] flex-col items-center justify-center pb-0 pt-16 text-center`}
         >
-          <div className="flex max-w-xl flex-col items-center">
+          <div className="flex max-w-xl flex-col items-center animate-[heroFade_700ms_ease-out_both]">
             <Availability />
-            <h1 className="mt-5 font-display text-5xl font-normal leading-none sm:text-7xl">
+            <h1 className="mt-6 font-display text-5xl font-normal leading-[0.94] tracking-[-0.02em] text-ink sm:mt-7 sm:text-7xl">
               Ahmed Ali
             </h1>
-            <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.22em] text-ink-soft">
+            <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.22em] text-ink-soft">
               UI/UX Engineer · Karachi
             </p>
-            <div className="mt-7 flex flex-wrap items-center justify-center gap-4">
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
               <Button asChild size="lg">
-                <Link to="/work">View work</Link>
+                <Link to="/" hash="selected-work">View work</Link>
               </Button>
               <Button asChild variant="outline" size="lg">
                 <Link to="/contact">Contact</Link>
               </Button>
             </div>
           </div>
-          <HeroVisual />
+          <div className="w-full animate-[heroRise_900ms_ease-out_both]">
+            <HeroVisual />
+          </div>
         </div>
       </section>
 

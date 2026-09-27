@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Menu, X, ArrowUpRight, Circle, Mail, Phone, Linkedin, MapPin } from "lucide-react";
+import { Menu, X, ArrowUpRight, Mail, Phone, Linkedin, MapPin } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { ImageLightbox } from "@/components/image-lightbox";
 import { Button } from "@/components/ui/button";
@@ -22,28 +22,29 @@ export function SiteHeader() {
     { label: "Contact", to: "/contact" as const },
   ];
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-line bg-paper/95 backdrop-blur-sm">
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-line/70 bg-white/85 shadow-[0_1px_0_rgb(47_107_253/0.06)] backdrop-blur-xl">
       <div className={`${pageWrap} grid h-16 grid-cols-[minmax(0,1fr)_auto] items-center gap-4`}>
         <Link
           to="/"
           className="group flex min-w-0 items-center gap-3"
           aria-label="Ahmed Ali — Home"
         >
-          <span className="grid size-8 shrink-0 place-items-center border border-ink font-mono text-[10px] font-medium transition-colors group-hover:bg-ink group-hover:text-paper">
+          <span className="grid size-8 shrink-0 place-items-center rounded-full bg-[linear-gradient(135deg,#2F6BFD_0%,#6DAFFE_100%)] font-mono text-[10px] font-bold text-white shadow-[var(--glow-brand)] transition-transform group-hover:scale-105">
             AA
           </span>
           <span className="min-w-0">
-            <span className="block truncate font-sans text-[14px] font-medium leading-none">
+            <span className="block truncate font-sans text-[14px] font-semibold leading-none text-ink">
               Ahmed Ali
             </span>
-            <span className="mt-1 hidden font-mono text-[9px] uppercase text-ink-soft sm:block">
+            <span className="mt-1 hidden font-mono text-[9px] uppercase tracking-[0.12em] text-ink-soft sm:block">
               UI/UX Engineer
             </span>
           </span>
         </Link>
-        <nav className="hidden h-full items-center gap-7 md:flex" aria-label="Primary navigation">
+        <nav className="hidden h-full items-center gap-1 md:flex" aria-label="Primary navigation">
           {nav.map((item) => {
             const isWork = item.label === "Work";
+            const isContact = item.label === "Contact";
             const workActive =
               hash === "selected-work" ||
               hash === "#selected-work" ||
@@ -53,21 +54,25 @@ export function SiteHeader() {
                 key={item.label}
                 to={item.to}
                 {...(isWork ? { hash: "selected-work" as const } : {})}
-                {...(isWork ? {} : { activeProps: { className: "text-ink after:scale-x-100" } })}
+                {...(isWork || isContact
+                  ? {}
+                  : {
+                      activeProps: {
+                        className: "bg-[#EDF6FF] text-navy shadow-sm",
+                      },
+                    })}
                 className={cn(
-                  "relative flex h-full items-center font-mono text-[10px] uppercase text-ink-soft transition-colors after:absolute after:inset-x-0 after:bottom-0 after:h-px after:origin-left after:scale-x-0 after:bg-amber after:transition-transform hover:text-ink hover:after:scale-x-100",
-                  isWork && workActive && "text-ink after:scale-x-100",
+                  "relative flex h-9 items-center rounded-full px-3.5 font-mono text-[10px] uppercase tracking-[0.08em] transition-all",
+                  isContact
+                    ? "bg-[linear-gradient(135deg,#2F6BFD_0%,#6DAFFE_100%)] font-semibold text-white shadow-[var(--glow-brand)] hover:brightness-105"
+                    : "text-ink-soft hover:bg-[#EDF6FF] hover:text-navy",
+                  isWork && workActive && "bg-[#EDF6FF] text-navy shadow-sm",
                 )}
               >
                 {item.label}
               </Link>
             );
           })}
-          <Button asChild size="sm">
-            <Link to="/contact">
-              Let&apos;s Talk <ArrowUpRight />
-            </Link>
-          </Button>
         </nav>
         <Button
           variant="ghost"
@@ -115,34 +120,38 @@ export function SiteHeader() {
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-paper/10 bg-black text-paper">
-      <div className={`${pageWrap} py-8 sm:py-10`}>
+    <footer className="relative overflow-hidden border-t border-white/15 bg-navy text-white">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_100%_0%,color-mix(in_oklab,#6DAFFE_35%,transparent),transparent_55%)]"
+      />
+      <div className={`${pageWrap} relative py-10 sm:py-12`}>
         <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-start">
           <div>
-            <p className="font-sans text-[15px] font-medium">Ahmed Ali</p>
-            <p className="mt-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-amber">
+            <p className="font-sans text-[15px] font-semibold text-white">Ahmed Ali</p>
+            <p className="mt-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-white/85">
               UI/UX Engineer · Product Designer — Karachi, Pakistan
             </p>
           </div>
-          <nav className="flex flex-wrap gap-x-6 gap-y-3 font-mono text-[10px] uppercase tracking-[0.14em] text-paper/55">
-            <Link to="/" hash="selected-work" className="transition-colors hover:text-paper">
+          <nav className="flex flex-wrap gap-x-5 gap-y-2 font-mono text-[10px] uppercase tracking-[0.14em] text-white/80">
+            <Link to="/" hash="selected-work" className="transition-colors hover:text-white">
               Work
             </Link>
-            <Link to="/about" className="transition-colors hover:text-paper">
+            <Link to="/about" className="transition-colors hover:text-white">
               About
             </Link>
-            <Link to="/services" className="transition-colors hover:text-paper">
+            <Link to="/services" className="transition-colors hover:text-white">
               Services
             </Link>
-            <Link to="/insights" className="transition-colors hover:text-paper">
+            <Link to="/insights" className="transition-colors hover:text-white">
               Insights
             </Link>
-            <Link to="/contact" className="transition-colors hover:text-paper">
+            <Link to="/contact" className="transition-colors hover:text-white">
               Contact
             </Link>
           </nav>
         </div>
-        <div className="mt-8 flex flex-col justify-between gap-3 border-t border-paper/10 pt-5 font-mono text-[10px] text-paper/40 sm:flex-row sm:items-center">
+        <div className="mt-8 flex flex-col justify-between gap-3 border-t border-white/20 pt-5 font-mono text-[10px] text-white/70 sm:flex-row sm:items-center">
           <p>© 2026 Ahmed Ali. All rights reserved.</p>
           <p>Designed &amp; built with care.</p>
         </div>
@@ -163,12 +172,16 @@ export function PageIntro({
   children: ReactNode;
 }) {
   return (
-    <section className="bg-paper pt-16">
-      <div className={`${pageWrap} py-16 sm:py-24`}>
+    <section className="relative overflow-hidden bg-paper pt-16">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_0%_0%,color-mix(in_oklab,var(--amber)_8%,transparent),transparent_55%)]"
+      />
+      <div className={`${pageWrap} relative py-16 sm:py-24`}>
         <p className="eyebrow">
           {index} / {eyebrow}
         </p>
-        <h1 className="mt-5 max-w-[18ch] font-serif text-4xl leading-[1.04] sm:text-6xl">
+        <h1 className="mt-5 max-w-[18ch] font-serif text-4xl leading-[1.04] tracking-[-0.03em] sm:text-6xl">
           {title}
         </h1>
         <div className="mt-6 max-w-[62ch] text-base leading-7 text-ink-soft">{children}</div>
@@ -189,7 +202,13 @@ export function SectionHeading({
   return (
     <div className="border-b border-line pb-6">
       <p className="eyebrow">{index}</p>
-      <h2 className="mt-3 font-serif text-3xl leading-tight sm:text-4xl">{title}</h2>
+      <h2 className="mt-3 font-serif text-3xl leading-tight tracking-[-0.03em] text-ink sm:text-4xl">
+        {title}
+      </h2>
+      <span
+        aria-hidden="true"
+        className="mt-4 block h-1 w-12 rounded-full bg-[linear-gradient(90deg,#2F6BFD,#6DAFFE)]"
+      />
       {text && <p className="mt-3 max-w-[52ch] text-sm leading-6 text-ink-soft">{text}</p>}
     </div>
   );
@@ -228,7 +247,7 @@ function BeforeAfterPair({
           </figcaption>
           <div
             className={cn(
-              "relative overflow-hidden rounded-lg border bg-paper",
+              "relative overflow-hidden rounded-2xl border bg-paper shadow-sm",
               compact && "min-h-0 flex-1",
               label === "After" ? "border-amber/45" : "border-line",
             )}
@@ -261,7 +280,7 @@ export function ProjectVisual({ project, large = false }: { project: Project; la
 
   return (
     <>
-      <div className="project-visual relative overflow-hidden rounded-lg border border-visual-line bg-paper">
+      <div className="project-visual relative overflow-hidden rounded-2xl border border-visual-line bg-paper">
         {comparison && large ? (
           <BeforeAfterPair project={project} />
         ) : (
@@ -295,7 +314,7 @@ export function ProjectVisual({ project, large = false }: { project: Project; la
                 className="block h-auto w-full"
               />
             )}
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-center justify-between bg-ink/80 px-4 py-3 font-mono text-[9px] uppercase tracking-[0.14em] text-paper sm:px-6">
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-center justify-between bg-navy/85 px-4 py-3 font-mono text-[9px] uppercase tracking-[0.14em] text-paper sm:px-6">
               <span>{project.name}</span>
               <span>
                 {project.number} / {String(projects.length).padStart(2, "0")}
@@ -320,7 +339,7 @@ export function ProjectVisual({ project, large = false }: { project: Project; la
 
 function ArchiveArrow() {
   return (
-    <span className="mt-1 grid size-9 shrink-0 place-items-center rounded-md border border-line text-ink transition-colors group-hover:border-amber group-hover:bg-amber group-hover:text-primary-foreground">
+    <span className="mt-1 grid size-9 shrink-0 place-items-center rounded-full border border-line text-ink transition-colors group-hover:border-amber group-hover:bg-amber group-hover:text-white">
       <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
     </span>
   );
@@ -331,7 +350,7 @@ function ProjectCover({ project, featured = false }: { project: Project; feature
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-md border border-line bg-paper-2",
+        "relative overflow-hidden rounded-2xl border border-line bg-paper-2 shadow-[var(--shadow-soft)]",
         comparison
           ? featured
             ? "aspect-[5/4]"
@@ -497,7 +516,7 @@ export function SelectedWorkSection() {
         <div className="grid items-start gap-8 border-b border-line pb-8 sm:pb-12 lg:grid-cols-12 lg:gap-16 lg:pb-16">
           <div className="lg:col-span-7">
             <p className="eyebrow">01 / Index</p>
-            <h2 className="mt-3 font-display text-[2.5rem] font-normal leading-[0.94] text-ink sm:mt-4 sm:text-6xl lg:max-w-[12ch] lg:text-[4.5rem]">
+            <h2 className="mt-3 font-display text-[2.5rem] font-bold leading-[0.94] tracking-[-0.03em] text-ink sm:mt-4 sm:text-6xl lg:max-w-[12ch] lg:text-[4.5rem]">
               Selected Work
             </h2>
           </div>
@@ -534,26 +553,26 @@ export function SelectedWorkSection() {
                   className="group block py-8 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber lg:hidden"
                 >
                   <div className="flex items-start justify-between gap-4">
-                    <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[oklab(0.59_0.141842_0.110819_/_0.9)]">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-amber">
                       Project {project.number}
                     </p>
-                    <span className="grid size-9 shrink-0 place-items-center rounded-md border border-line text-ink transition-colors group-hover:border-[oklab(0.59_0.141842_0.110819_/_0.9)] group-hover:bg-[oklab(0.59_0.141842_0.110819_/_0.9)] group-hover:text-paper">
+                    <span className="grid size-9 shrink-0 place-items-center rounded-full border border-line text-ink transition-colors group-hover:border-amber group-hover:bg-amber group-hover:text-white">
                       <ArrowUpRight className="size-4" />
                     </span>
                   </div>
                   <h3 className="mt-3 font-display text-[1.75rem] leading-[1.08] text-ink">
                     {project.name}
                   </h3>
-                  <div className="relative mt-5 overflow-hidden rounded-xl">
+                  <div className="media-frame relative mt-5">
                     <img
                       src={projectCoverSrc(project)}
                       alt={projectCoverAlt(project)}
                       width={1600}
                       height={1000}
                       loading="lazy"
-                      className="aspect-[5/4] h-auto w-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.02]"
+                      className="aspect-[5/4] h-auto w-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.03]"
                     />
-                    <p className="pointer-events-none absolute inset-x-0 bottom-0 truncate bg-gradient-to-t from-ink/65 to-transparent px-4 pb-3 pt-10 font-mono text-[9px] uppercase tracking-[0.14em] text-paper">
+                    <p className="pointer-events-none absolute inset-x-0 bottom-0 truncate bg-gradient-to-t from-navy/80 to-transparent px-4 pb-3 pt-10 font-mono text-[9px] uppercase tracking-[0.14em] text-paper">
                       {project.name} · {tags[0]}
                     </p>
                   </div>
@@ -576,7 +595,7 @@ export function SelectedWorkSection() {
                       {tags.map((tag) => (
                         <span
                           key={tag}
-                          className="rounded-full bg-paper-2 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.12em] text-ink-soft"
+                          className="rounded-full border border-line bg-paper-2 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.12em] text-ink-soft"
                         >
                           {tag}
                         </span>
@@ -592,7 +611,7 @@ export function SelectedWorkSection() {
                   className="group hidden items-start gap-x-8 gap-y-5 py-10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber lg:grid lg:grid-cols-12 lg:grid-rows-[auto_auto]"
                 >
                   <div className="lg:col-span-3 lg:row-start-1 lg:pr-2">
-                    <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[oklab(0.59_0.141842_0.110819_/_0.9)]">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-amber">
                       Project {project.number}
                     </p>
                     <h3 className="mt-2 max-w-[12ch] font-display text-[2.35rem] leading-[1.08] text-ink">
@@ -600,22 +619,22 @@ export function SelectedWorkSection() {
                     </h3>
                   </div>
 
-                  <div className="relative overflow-hidden rounded-md lg:col-span-6 lg:col-start-4 lg:row-start-1">
+                  <div className="media-frame relative lg:col-span-6 lg:col-start-4 lg:row-start-1">
                     <img
                       src={projectCoverSrc(project)}
                       alt={projectCoverAlt(project)}
                       width={1600}
                       height={720}
                       loading="lazy"
-                      className="aspect-[2.35/1] h-auto w-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.02]"
+                      className="aspect-[2.35/1] h-auto w-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.03]"
                     />
-                    <p className="pointer-events-none absolute inset-x-0 bottom-0 truncate bg-gradient-to-t from-ink/70 to-transparent px-4 pb-3 pt-10 font-mono text-[9px] uppercase tracking-[0.16em] text-paper">
+                    <p className="pointer-events-none absolute inset-x-0 bottom-0 truncate bg-gradient-to-t from-navy/80 to-transparent px-4 pb-3 pt-10 font-mono text-[9px] uppercase tracking-[0.16em] text-paper">
                       {project.name} · {tags[0]}
                     </p>
                   </div>
 
                   <div className="flex h-full flex-col items-end justify-between border-l border-line pl-8 lg:col-span-3 lg:row-start-1">
-                    <span className="grid size-9 shrink-0 place-items-center rounded-md border border-line text-ink transition-colors group-hover:border-[oklab(0.59_0.141842_0.110819_/_0.9)] group-hover:bg-[oklab(0.59_0.141842_0.110819_/_0.9)] group-hover:text-paper">
+                    <span className="grid size-9 shrink-0 place-items-center rounded-full border border-line text-ink transition-colors group-hover:border-amber group-hover:bg-amber group-hover:text-white">
                       <ArrowUpRight className="size-4" />
                     </span>
                     <div className="text-right">
@@ -661,7 +680,7 @@ export function SelectedWorkSection() {
           <Button
             asChild
             size="sm"
-            className="shrink-0 rounded-full bg-ink px-4 text-paper hover:bg-ink hover:text-paper"
+            className="shrink-0 px-4"
           >
             <Link to="/" hash="selected-work">
               View all <ArrowUpRight className="size-3.5" />
@@ -675,11 +694,13 @@ export function SelectedWorkSection() {
 
 export function ServicesGrid() {
   return (
-    <div className="mt-10 grid gap-x-8 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
       {services.map(([name, text], index) => (
-        <article key={name} className="border-t border-line pt-4">
-          <p className="font-mono text-[10px] text-amber">S/{String(index + 1).padStart(2, "0")}</p>
-          <h3 className="mt-3 font-sans text-base font-medium">{name}</h3>
+        <article key={name} className="surface-card p-5 sm:p-6">
+          <p className="font-mono text-[10px] font-semibold text-navy">
+            S/{String(index + 1).padStart(2, "0")}
+          </p>
+          <h3 className="mt-3 font-sans text-base font-semibold text-ink">{name}</h3>
           <p className="mt-2 text-sm leading-6 text-ink-soft">{text}</p>
         </article>
       ))}
@@ -689,11 +710,16 @@ export function ServicesGrid() {
 
 export function ProcessTimeline() {
   return (
-    <div className="mt-10 grid gap-px overflow-hidden rounded-lg bg-line sm:grid-cols-2 lg:grid-cols-6">
+    <div className="mt-10 grid gap-px overflow-hidden rounded-2xl border border-line bg-line shadow-[var(--shadow-soft)] sm:grid-cols-2 lg:grid-cols-6">
       {processSteps.map(([name, text], index) => (
-        <article key={name} className="bg-paper p-5">
-          <p className="font-mono text-[11px] text-amber">{String(index + 1).padStart(2, "0")}</p>
-          <h3 className="mt-3 font-sans text-sm font-medium">{name}</h3>
+        <article
+          key={name}
+          className="bg-white p-5 transition-colors hover:bg-[#EDF6FF]"
+        >
+          <p className="inline-flex size-7 items-center justify-center rounded-full bg-[linear-gradient(135deg,#2F6BFD_0%,#6DAFFE_100%)] font-mono text-[10px] font-bold text-white">
+            {String(index + 1).padStart(2, "0")}
+          </p>
+          <h3 className="mt-3 font-sans text-sm font-semibold text-ink">{name}</h3>
           <p className="mt-2 text-xs leading-5 text-ink-soft">{text}</p>
         </article>
       ))}
@@ -712,20 +738,20 @@ export function DesignSystemSpecimen() {
         <div className="mt-10 grid gap-4 md:grid-cols-12">
           <div className="specimen md:col-span-4">
             <p className="spec-label">Typography scale</p>
-            <p className="mt-5 font-serif text-5xl">Aa</p>
-            <p className="mt-3 font-sans text-sm">Space Grotesk</p>
-            <p className="font-serif text-xl">Newsreader</p>
-            <p className="font-mono text-[10px] uppercase tracking-[0.14em]">IBM Plex Mono</p>
+            <p className="mt-5 font-serif text-5xl font-bold">Aa</p>
+            <p className="mt-3 font-sans text-sm font-semibold">Plus Jakarta Sans</p>
+            <p className="font-body text-base">Inter</p>
+            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em]">Labels / UI mono</p>
           </div>
           <div className="specimen md:col-span-3">
             <p className="spec-label">Color tokens</p>
             <div className="mt-5 flex gap-2">
-              <span className="swatch bg-paper" />
+              <span className="swatch bg-paper border border-line" />
               <span className="swatch bg-ink" />
               <span className="swatch bg-amber" />
-              <span className="swatch bg-line" />
+              <span className="swatch bg-teal" />
             </div>
-            <p className="mt-4 font-mono text-[10px] text-ink-soft">paper / ink / signal / line</p>
+            <p className="mt-4 font-mono text-[10px] text-ink-soft">paper / ink / blue / teal</p>
           </div>
           <div className="specimen md:col-span-5">
             <p className="spec-label">Product components</p>
@@ -734,11 +760,11 @@ export function DesignSystemSpecimen() {
               <Button size="sm" variant="outline">
                 Secondary
               </Button>
-              <span className="rounded bg-amber/10 px-2 py-1 font-mono text-[10px] text-amber">
+              <span className="rounded-full bg-amber px-3 py-1 font-mono text-[10px] font-semibold text-white">
                 Active
               </span>
             </div>
-            <Input className="mt-4" placeholder="Search records" />
+            <Input className="mt-4 rounded-full" placeholder="Search records" />
             <div className="mt-4 grid grid-cols-[1fr_auto] border-y border-line py-2 text-xs">
               <span>Responsive table row</span>
               <span className="text-ink-soft">Ready</span>
@@ -771,7 +797,7 @@ export function ContactMethods({
     <ul
       className={cn(
         "grid gap-px overflow-hidden",
-        cards ? "rounded-lg bg-line sm:grid-cols-2" : "rounded-lg sm:grid-cols-2 lg:grid-cols-4",
+        cards ? "rounded-2xl bg-line shadow-[var(--shadow-soft)] sm:grid-cols-2" : "rounded-2xl shadow-[var(--shadow-soft)] sm:grid-cols-2 lg:grid-cols-4",
         onInk ? "bg-paper/15" : "bg-line",
       )}
     >
@@ -780,15 +806,15 @@ export function ContactMethods({
         const className = cn(
           "group flex h-full transition-colors",
           cards ? "flex-col gap-8 p-6 sm:p-7" : "items-center gap-3 p-4 sm:p-5",
-          onInk ? "bg-ink hover:bg-paper/5" : "bg-paper hover:bg-paper-2",
+          onInk ? "bg-navy hover:bg-navy/90" : "bg-paper-2 hover:bg-white",
         );
         const body = (
           <>
             <span
               className={cn(
-                "grid shrink-0 place-items-center rounded-md border",
+                "grid shrink-0 place-items-center rounded-full border",
                 cards ? "size-10" : "size-8",
-                onInk ? "border-paper/20 text-amber" : "border-line text-amber",
+                onInk ? "border-paper/20 text-teal" : "border-line text-amber",
               )}
             >
               <Icon className={cards ? "size-4" : "size-3.5"} />
@@ -804,7 +830,7 @@ export function ContactMethods({
               </span>
               <span
                 className={cn(
-                  "mt-1 block font-sans font-medium",
+                  "mt-1 block font-sans font-semibold",
                   cards ? "text-lg sm:text-xl" : "truncate text-sm",
                   onInk ? "text-paper" : "text-ink",
                   "href" in item && "group-hover:text-amber",
@@ -840,8 +866,11 @@ export function ContactMethods({
 
 export function Availability() {
   return (
-    <span className="inline-flex items-center gap-2 rounded-full border border-line bg-paper-2 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-ink-soft">
-      <Circle className="size-2 fill-current text-amber" />
+    <span className="inline-flex items-center gap-2.5 rounded-full border border-navy/20 bg-[#EDF6FF] px-4 py-2 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-navy shadow-[0_0_0_4px_rgb(47_107_253/0.08),var(--shadow-soft)]">
+      <span className="relative flex size-2.5 shrink-0" aria-hidden="true">
+        <span className="absolute inset-0 animate-ping rounded-full bg-navy opacity-40" />
+        <span className="relative m-auto size-2 rounded-full bg-[linear-gradient(135deg,#2F6BFD,#6DAFFE)] ring-2 ring-white" />
+      </span>
       Available for selected work
     </span>
   );

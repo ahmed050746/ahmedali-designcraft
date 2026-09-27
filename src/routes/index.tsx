@@ -38,7 +38,11 @@ function HeroVisual() {
     <div className="relative mx-auto mt-2 w-full max-w-[360px] sm:mt-3 sm:max-w-[480px] lg:max-w-[560px]">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-[18%] h-[70%] w-[85%] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,color-mix(in_oklab,var(--amber)_16%,transparent),transparent_70%)] blur-2xl"
+        className="hero-orb pointer-events-none absolute left-[14%] top-[10%] h-[58%] w-[52%] rounded-full bg-[radial-gradient(circle,color-mix(in_oklab,#6DAFFE_32%,transparent),transparent_70%)] blur-3xl"
+      />
+      <div
+        aria-hidden="true"
+        className="hero-orb-delay pointer-events-none absolute bottom-[6%] right-[8%] h-[52%] w-[48%] rounded-full bg-[radial-gradient(circle,color-mix(in_oklab,#2F6BFD_22%,transparent),transparent_70%)] blur-3xl"
       />
       <div
         className="relative overflow-hidden"
@@ -63,16 +67,20 @@ function HeroVisual() {
 function HomePage() {
   return (
     <>
-      <section className="relative overflow-hidden bg-paper pt-16 text-ink">
+      <section className="relative overflow-hidden bg-white pt-16 text-ink">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_0%,color-mix(in_oklab,#6DAFFE_16%,transparent),transparent_58%),radial-gradient(ellipse_50%_40%_at_100%_20%,color-mix(in_oklab,#2F6BFD_10%,transparent),transparent_50%)]"
+        />
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0"
           style={{
             backgroundImage:
-              "linear-gradient(to right, color-mix(in oklch, var(--line) 90%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in oklch, var(--line) 90%, transparent) 1px, transparent 1px)",
-            backgroundSize: "48px 48px",
-            maskImage: "radial-gradient(ellipse at 50% 45%, black 18%, transparent 70%)",
-            WebkitMaskImage: "radial-gradient(ellipse at 50% 45%, black 18%, transparent 70%)",
+              "linear-gradient(to right, color-mix(in oklch, var(--line) 65%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in oklch, var(--line) 65%, transparent) 1px, transparent 1px)",
+            backgroundSize: "56px 56px",
+            maskImage: "radial-gradient(ellipse at 50% 38%, black 10%, transparent 66%)",
+            WebkitMaskImage: "radial-gradient(ellipse at 50% 38%, black 10%, transparent 66%)",
           }}
         />
         <div
@@ -80,18 +88,26 @@ function HomePage() {
         >
           <div className="flex max-w-xl flex-col items-center animate-[heroFade_700ms_ease-out_both]">
             <Availability />
-            <h1 className="mt-6 font-display text-5xl font-normal leading-[0.94] tracking-[-0.02em] text-ink sm:mt-7 sm:text-7xl">
+            <h1 className="mt-6 font-display text-5xl font-bold leading-[0.94] tracking-[-0.03em] text-ink sm:mt-7 sm:text-7xl">
               Ahmed Ali
             </h1>
+            <span
+              aria-hidden="true"
+              className="mt-4 h-1 w-16 rounded-full bg-[linear-gradient(90deg,#2F6BFD,#6DAFFE)]"
+            />
             <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.22em] text-ink-soft">
               UI/UX Engineer · Karachi
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
               <Button asChild size="lg">
-                <Link to="/" hash="selected-work">View work</Link>
+                <Link to="/" hash="selected-work">
+                  View work
+                </Link>
               </Button>
               <Button asChild variant="outline" size="lg">
-                <Link to="/contact">Contact</Link>
+                <Link to="/contact">
+                  Contact
+                </Link>
               </Button>
             </div>
           </div>
@@ -104,31 +120,39 @@ function HomePage() {
       <SelectedWorkSection />
 
       <DesignSystemSpecimen />
-      <section className="bg-paper">
-        <div className={`${pageWrap} py-20`}>
+      <section className="relative overflow-hidden bg-[#EDF6FF]/40">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-24 top-16 h-72 w-72 rounded-full bg-[radial-gradient(circle,color-mix(in_oklab,#2F6BFD_12%,transparent),transparent_70%)] blur-2xl"
+        />
+        <div className={`${pageWrap} relative py-20 sm:py-24`}>
           <SectionHeading index="03 / Capabilities" title="What I Can Help With" />
           <ServicesGrid />
-          <div className="mt-20">
+          <div className="mt-20 sm:mt-24">
             <SectionHeading index="04 / Process" title="From problem to polished interface." />
             <ProcessTimeline />
           </div>
         </div>
       </section>
-      <section className="border-t border-line bg-paper-2">
-        <div className={`${pageWrap} py-20`}>
+      <section className="relative border-t border-line bg-white">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -left-20 bottom-0 h-56 w-56 rounded-full bg-[radial-gradient(circle,color-mix(in_oklab,#6DAFFE_14%,transparent),transparent_70%)] blur-2xl"
+        />
+        <div className={`${pageWrap} relative py-20 sm:py-24`}>
           <SectionHeading index="05 / Insights" title="Notes from the work." />
-          <div className="mt-10 grid gap-px overflow-hidden rounded-lg bg-line md:grid-cols-2">
+          <div className="mt-10 grid gap-5 overflow-hidden md:grid-cols-2">
             {insights.map((item) => (
               <Link
                 key={item.slug}
                 to="/insights/$slug"
                 params={{ slug: item.slug }}
-                className="group bg-paper p-6"
+                className="surface-card group p-6 sm:p-7"
               >
                 <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-ink-soft">
                   {item.category} · {item.time}
                 </p>
-                <h3 className="mt-3 max-w-[30ch] font-serif text-xl transition-colors group-hover:text-amber">
+                <h3 className="mt-3 max-w-[30ch] font-display text-xl font-bold transition-colors group-hover:text-navy">
                   {item.title}
                 </h3>
                 <p className="mt-2 text-sm leading-6 text-ink-soft">{item.excerpt}</p>

@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { Menu, X, ArrowUpRight, Mail, Phone, Linkedin, MapPin } from "lucide-react";
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ImageLightbox } from "@/components/image-lightbox";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -509,183 +509,236 @@ function projectCoverAlt(project: Project) {
 }
 
 export function SelectedWorkSection() {
-  const items = projects.slice(0, 5);
+  const items = projects;
+  const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const progressRef = useRef(0);
+  const AUTO_MS = 6000;
+  const activeProject = items[active] ?? items[0];
+
+  useEffect(() => {
+    progressRef.current = 0;
+    setProgress(0);
+  }, [active]);
+
+  useEffect(() => {
+    if (paused || items.length < 2) return;
+
+    const start = performance.now();
+    const startProgress = progressRef.current;
+    const duration = Math.max(120, AUTO_MS * (1 - startProgress));
+    let frame = 0;
+    let advanced = false;
+
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / duration);
+      const value = startProgress + (1 - startProgress) * t;
+      progressRef.current = value;
+      setProgress(value);
+
+      if (t < 1) {
+        frame = window.requestAnimationFrame(tick);
+        return;
+      }
+
+      if (!advanced) {
+        advanced = true;
+        setActive((current) => (current + 1) % items.length);
+      }
+    };
+
+    frame = window.requestAnimationFrame(tick);
+    return () => window.cancelAnimationFrame(frame);
+  }, [active, paused, items.length]);
+
   return (
-    <section id="selected-work" className="scroll-mt-16 bg-paper">
-      <div className={`${pageWrap} pb-12 pt-8 sm:pb-20 sm:pt-12 lg:pb-24 lg:pt-16`}>
-        <div className="grid items-start gap-8 border-b border-line pb-8 sm:pb-12 lg:grid-cols-12 lg:gap-16 lg:pb-16">
-          <div className="lg:col-span-7">
-            <p className="eyebrow">01 / Index</p>
-            <h2 className="mt-3 font-display text-[2.5rem] font-bold leading-[0.94] tracking-[-0.03em] text-ink sm:mt-4 sm:text-6xl lg:max-w-[12ch] lg:text-[4.5rem]">
-              Selected Work
-            </h2>
-          </div>
-          <div className="max-w-[42ch] space-y-6 lg:col-span-5 lg:space-y-0 lg:pt-8">
-            <div>
-              <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-ink-soft">
-                Overview
-              </p>
-              <p className="mt-3 text-sm leading-6 text-ink-soft sm:text-[15px] sm:leading-7">
-                A selection of interfaces, product experiences, and redesign work I&apos;ve
-                contributed to.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between border-b border-line py-4 lg:hidden">
-          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-ink-soft">Projects</p>
-          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-ink-soft">
-            {String(items.length).padStart(2, "0")} selected
+    <section id="selected-work" className="scroll-mt-16 bg-[#F5F7FA]">
+      <div className={`${pageWrap} pb-16 pt-12 sm:pb-24 sm:pt-16 lg:pb-28 lg:pt-20`}>
+        <div className="mb-10 max-w-2xl sm:mb-14">
+          <p className="eyebrow">01 / Index</p>
+          <h2 className="mt-3 font-display text-[2.5rem] font-bold leading-[0.94] tracking-[-0.03em] text-ink sm:mt-4 sm:text-6xl lg:text-[4rem]">
+            Selected Work
+          </h2>
+          <p className="mt-4 max-w-[48ch] text-sm leading-6 text-ink-soft sm:text-[15px] sm:leading-7">
+            A selection of interfaces, product experiences, and redesign work I&apos;ve
+            contributed to.
           </p>
         </div>
 
-        <ul>
-          {items.map((project) => {
-            const tags = splitTokens(project.category);
-            const roleLines = splitTokens(project.role);
-            return (
-              <li key={project.slug} className="border-b border-line">
-                {/* Mobile layout — matches Body (1).pdf */}
-                <Link
-                  to="/work/$slug"
-                  params={{ slug: project.slug }}
-                  className="group block py-8 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber lg:hidden"
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-amber">
-                      Project {project.number}
-                    </p>
-                    <span className="grid size-9 shrink-0 place-items-center rounded-full border border-line text-ink transition-colors group-hover:border-amber group-hover:bg-amber group-hover:text-white">
-                      <ArrowUpRight className="size-4" />
-                    </span>
-                  </div>
-                  <h3 className="mt-3 font-display text-[1.75rem] leading-[1.08] text-ink">
-                    {project.name}
-                  </h3>
-                  <div className="media-frame relative mt-5">
-                    <img
-                      src={projectCoverSrc(project)}
-                      alt={projectCoverAlt(project)}
-                      width={1600}
-                      height={1000}
-                      loading="lazy"
-                      className="aspect-[5/4] h-auto w-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.03]"
-                    />
-                    <p className="pointer-events-none absolute inset-x-0 bottom-0 truncate bg-gradient-to-t from-navy/80 to-transparent px-4 pb-3 pt-10 font-mono text-[9px] uppercase tracking-[0.14em] text-paper">
-                      {project.name} · {tags[0]}
-                    </p>
-                  </div>
-                  <p className="mt-5 text-sm leading-6 text-ink-soft">{project.description}</p>
-                  <div className="mt-6 flex items-end justify-between gap-4">
-                    <div className="min-w-0">
-                      <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-ink-soft">
-                        Role — {roleLines[0]}
-                      </p>
-                      {roleLines.slice(1).map((line) => (
-                        <p
-                          key={line}
-                          className="mt-1 font-mono text-[10px] uppercase tracking-[0.14em] text-ink-soft"
-                        >
-                          {line}
-                        </p>
-                      ))}
-                    </div>
-                    <div className="flex shrink-0 flex-col items-end gap-1.5">
-                      {tags.map((tag) => (
+        <div className="grid items-start gap-8 lg:grid-cols-12 lg:gap-12 xl:gap-16">
+          {/* Accordion list — indexed rail */}
+          <div className="order-2 lg:order-1 lg:col-span-5 xl:col-span-4">
+            <ul className="relative flex flex-col">
+              <span
+                aria-hidden="true"
+                className="absolute bottom-4 left-[15px] top-4 w-px bg-gradient-to-b from-line via-line to-transparent sm:left-[17px]"
+              />
+
+              {items.map((project, index) => {
+                const isActive = index === active;
+                const category = splitTokens(project.category)[0];
+                return (
+                  <li key={project.slug} className="relative">
+                    <div
+                      className={cn(
+                        "relative transition-all duration-300",
+                        isActive &&
+                          "rounded-2xl border border-line bg-white shadow-[0_10px_36px_-20px_rgba(47,107,253,0.35)]",
+                      )}
+                      onMouseEnter={() => {
+                        if (isActive) setPaused(true);
+                      }}
+                      onMouseLeave={() => setPaused(false)}
+                    >
+                      {isActive && (
                         <span
-                          key={tag}
-                          className="rounded-full border border-line bg-paper-2 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.12em] text-ink-soft"
+                          aria-hidden="true"
+                          className="absolute inset-y-3 left-0 w-[3px] rounded-full bg-[linear-gradient(180deg,#2F6BFD,#6DAFFE)]"
+                        />
+                      )}
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActive(index);
+                          setPaused(true);
+                        }}
+                        aria-expanded={isActive}
+                        aria-controls={`work-panel-${project.slug}`}
+                        className={cn(
+                          "group/item flex w-full items-start gap-4 text-left outline-none transition-all duration-300 focus-visible:ring-2 focus-visible:ring-navy/40 focus-visible:ring-offset-2",
+                          isActive
+                            ? "px-5 pb-2 pt-5 sm:gap-5 sm:px-6 sm:pt-6"
+                            : "rounded-xl px-2 py-4 hover:bg-white/80 sm:px-3 sm:py-5",
+                        )}
+                      >
+                        <span
+                          className={cn(
+                            "relative z-[1] mt-0.5 grid size-8 shrink-0 place-items-center rounded-full font-mono text-[10px] font-bold tracking-wider transition-all duration-300 sm:size-9",
+                            isActive
+                              ? "scale-105 bg-[linear-gradient(135deg,#2F6BFD_0%,#6DAFFE_100%)] text-white shadow-[var(--glow-brand)]"
+                              : "border border-line bg-[#F5F7FA] text-ink-soft group-hover/item:border-navy/30 group-hover/item:text-navy",
+                          )}
                         >
-                          {tag}
+                          {project.number}
                         </span>
-                      ))}
+
+                        <span className="min-w-0 flex-1 pt-0.5">
+                          <span
+                            className={cn(
+                              "block font-display leading-snug tracking-[-0.025em] transition-colors duration-300",
+                              isActive
+                                ? "text-xl font-bold text-ink sm:text-[1.35rem]"
+                                : "text-lg font-semibold text-ink/55 group-hover/item:text-ink sm:text-xl",
+                            )}
+                          >
+                            {project.name}
+                          </span>
+                          {!isActive && (
+                            <span className="mt-1.5 block font-mono text-[9px] uppercase tracking-[0.16em] text-ink-soft/80 transition-colors group-hover/item:text-navy/70">
+                              {category}
+                            </span>
+                          )}
+                        </span>
+
+                        <span
+                          className={cn(
+                            "mt-1 grid size-8 shrink-0 place-items-center rounded-full transition-all duration-300",
+                            isActive
+                              ? "bg-[#EDF6FF] text-navy"
+                              : "text-ink/25 group-hover/item:translate-x-0.5 group-hover/item:bg-white group-hover/item:text-navy",
+                          )}
+                        >
+                          <ArrowUpRight
+                            className={cn(
+                              "size-3.5 transition-transform duration-300",
+                              isActive && "rotate-45",
+                            )}
+                          />
+                        </span>
+                      </button>
+
+                      {isActive && (
+                        <div
+                          id={`work-panel-${project.slug}`}
+                          className="animate-[heroFade_320ms_ease-out_both] px-5 pb-5 pl-[3.25rem] sm:px-6 sm:pb-6 sm:pl-[3.75rem]"
+                        >
+                          <p className="max-w-[42ch] text-sm leading-6 text-ink-soft">
+                            {project.description}
+                          </p>
+                          <div className="mt-4 flex flex-wrap items-center gap-2">
+                            <span className="rounded-full bg-[#EDF6FF] px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.12em] text-navy">
+                              {category}
+                            </span>
+                            <span className="rounded-full border border-line px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.12em] text-ink-soft">
+                              {project.platform.split(" ")[0]}
+                            </span>
+                            <Link
+                              to="/work/$slug"
+                              params={{ slug: project.slug }}
+                              className="ml-auto inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-[0.14em] text-navy transition-opacity hover:opacity-70"
+                            >
+                              Case study
+                              <ArrowUpRight className="size-3.5" />
+                            </Link>
+                          </div>
+                          <div className="mt-5 h-[3px] w-full overflow-hidden rounded-full bg-line">
+                            <span
+                              aria-hidden="true"
+                              className="block h-full w-full origin-left rounded-full bg-[linear-gradient(90deg,#2F6BFD,#6DAFFE)] transition-none"
+                              style={{ transform: `scaleX(${progress})` }}
+                            />
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  </div>
-                </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
 
-                {/* Desktop layout — matches Body.pdf */}
-                <Link
-                  to="/work/$slug"
-                  params={{ slug: project.slug }}
-                  className="group hidden items-start gap-x-8 gap-y-5 py-10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber lg:grid lg:grid-cols-12 lg:grid-rows-[auto_auto]"
-                >
-                  <div className="lg:col-span-3 lg:row-start-1 lg:pr-2">
-                    <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-amber">
-                      Project {project.number}
-                    </p>
-                    <h3 className="mt-2 max-w-[12ch] font-display text-[2.35rem] leading-[1.08] text-ink">
-                      {project.name}
-                    </h3>
-                  </div>
-
-                  <div className="media-frame relative lg:col-span-6 lg:col-start-4 lg:row-start-1">
+          {/* Preview stays in view while the project list grows */}
+          <div className="order-1 lg:sticky lg:top-24 lg:order-2 lg:col-span-7 lg:self-start xl:col-span-8">
+            {activeProject && (
+              <Link
+                to="/work/$slug"
+                params={{ slug: activeProject.slug }}
+                className="group relative block overflow-hidden rounded-2xl border border-line bg-white shadow-[0_12px_40px_-24px_rgba(15,23,42,0.2)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber"
+              >
+                <div className="relative h-[min(420px,52svh)] w-full overflow-hidden sm:h-[min(480px,58svh)] lg:h-[min(560px,calc(100svh-8rem))]">
+                  {items.map((project, index) => (
                     <img
+                      key={project.slug}
                       src={projectCoverSrc(project)}
                       alt={projectCoverAlt(project)}
                       width={1600}
-                      height={720}
-                      loading="lazy"
-                      className="aspect-[2.35/1] h-auto w-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.03]"
+                      height={1100}
+                      loading={index === 0 ? "eager" : "lazy"}
+                      className={cn(
+                        "absolute inset-0 h-full w-full object-cover object-top transition-opacity duration-500 ease-out",
+                        index === active ? "z-[1] opacity-100" : "z-0 opacity-0",
+                      )}
                     />
-                    <p className="pointer-events-none absolute inset-x-0 bottom-0 truncate bg-gradient-to-t from-navy/80 to-transparent px-4 pb-3 pt-10 font-mono text-[9px] uppercase tracking-[0.16em] text-paper">
-                      {project.name} · {tags[0]}
-                    </p>
-                  </div>
-
-                  <div className="flex h-full flex-col items-end justify-between border-l border-line pl-8 lg:col-span-3 lg:row-start-1">
-                    <span className="grid size-9 shrink-0 place-items-center rounded-full border border-line text-ink transition-colors group-hover:border-amber group-hover:bg-amber group-hover:text-white">
+                  ))}
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] flex items-end justify-between bg-gradient-to-t from-ink/70 via-ink/20 to-transparent px-5 pb-5 pt-16 sm:px-7 sm:pb-6">
+                    <div>
+                      <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/70">
+                        Project {activeProject.number} / {String(items.length).padStart(2, "0")}
+                      </p>
+                      <p className="mt-1 font-display text-lg font-semibold text-white sm:text-xl">
+                        {activeProject.name}
+                      </p>
+                    </div>
+                    <span className="grid size-10 place-items-center rounded-full border border-white/30 bg-white/10 text-white backdrop-blur-sm transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
                       <ArrowUpRight className="size-4" />
                     </span>
-                    <div className="text-right">
-                      <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-ink-soft">
-                        Role — {roleLines[0]}
-                      </p>
-                      {roleLines.slice(1).map((line) => (
-                        <p
-                          key={line}
-                          className="mt-1 font-mono text-[10px] uppercase tracking-[0.14em] text-ink-soft"
-                        >
-                          {line}
-                        </p>
-                      ))}
-                      <div className="mt-5 space-y-1">
-                        {tags.map((tag) => (
-                          <p
-                            key={tag}
-                            className="font-mono text-[10px] uppercase tracking-[0.14em] text-ink"
-                          >
-                            {tag}
-                          </p>
-                        ))}
-                      </div>
-                    </div>
                   </div>
-
-                  <p className="text-sm leading-6 text-ink-soft lg:col-span-6 lg:col-start-4 lg:row-start-2">
-                    {project.description}
-                  </p>
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-
-        <div className="flex items-center justify-between gap-4 pt-7 sm:pt-8">
-          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-ink-soft">
-            {String(items.length).padStart(2, "0")} projects
-            <span className="mx-2 text-line">·</span>
-            2026
-          </p>
-          <Button
-            asChild
-            size="sm"
-            className="shrink-0 px-4"
-          >
-            <Link to="/" hash="selected-work">
-              View all <ArrowUpRight className="size-3.5" />
-            </Link>
-          </Button>
+                </div>
+              </Link>
+            )}
+          </div>
         </div>
       </div>
     </section>

@@ -71,21 +71,6 @@ function HomePage() {
       <section className="relative overflow-hidden bg-white pt-16 text-ink">
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-[55%]"
-          style={{
-            backgroundImage: [
-              "radial-gradient(ellipse 90% 80% at 50% 100%, color-mix(in oklab, #6DAFFE 32%, transparent), transparent 70%)",
-              "radial-gradient(ellipse 45% 70% at 12% 100%, color-mix(in oklab, #2F6BFD 26%, transparent), transparent 65%)",
-              "radial-gradient(ellipse 45% 70% at 88% 100%, color-mix(in oklab, #2F6BFD 26%, transparent), transparent 65%)",
-            ].join(", "),
-          }}
-        />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -bottom-32 left-1/2 h-[280px] w-[min(920px,110%)] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,color-mix(in_oklab,#2F6BFD_35%,transparent),transparent_70%)] blur-3xl"
-        />
-        <div
-          aria-hidden="true"
           className="pointer-events-none absolute inset-0"
           style={{
             backgroundImage:

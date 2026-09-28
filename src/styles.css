@@ -303,11 +303,80 @@
   50% { opacity: 0.75; }
 }
 
+@keyframes iconFloat {
+  0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+  50% { transform: translate(-50%, -50%) translateY(-8px); }
+}
+
+@keyframes iconFloatAlt {
+  0%, 100% { transform: translate(-50%, -50%) translateY(0) translateX(0); }
+  50% { transform: translate(-50%, -50%) translateY(-6px) translateX(3px); }
+}
+
+@keyframes orbitArmCw {
+  from { transform: rotate(var(--orbit-start, 0deg)); }
+  to { transform: rotate(calc(var(--orbit-start, 0deg) + 360deg)); }
+}
+
+@keyframes orbitArmCcw {
+  from { transform: rotate(var(--orbit-start, 0deg)); }
+  to { transform: rotate(calc(var(--orbit-start, 0deg) - 360deg)); }
+}
+
+@keyframes orbitFaceCw {
+  from { transform: translate(50%, -50%) rotate(0deg); }
+  to { transform: translate(50%, -50%) rotate(360deg); }
+}
+
+@keyframes orbitFaceCcw {
+  from { transform: translate(50%, -50%) rotate(0deg); }
+  to { transform: translate(50%, -50%) rotate(-360deg); }
+}
+
 .hero-orb {
   animation: orbDrift 9s ease-in-out infinite;
 }
 .hero-orb-delay {
   animation: orbDrift 11s ease-in-out infinite reverse;
+}
+
+.hero-float-icon {
+  transform: translate(-50%, -50%);
+  animation-name: iconFloat;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+.hero-float-icon:nth-child(even) {
+  animation-name: iconFloatAlt;
+}
+
+/* Each icon orbits independently; rings stay fixed */
+.hero-orbit-arm-cw {
+  animation-name: orbitArmCw;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+.hero-orbit-arm-ccw {
+  animation-name: orbitArmCcw;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+.hero-orbit-face-cw {
+  animation-name: orbitFaceCw;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.hero-orbit-face-ccw {
+  animation-name: orbitFaceCcw;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {

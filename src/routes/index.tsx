@@ -10,6 +10,7 @@ import {
   pageWrap,
 } from "@/components/portfolio";
 import { insights } from "@/lib/portfolio-data";
+import { HeroFloatingIcons } from "@/components/hero-floating-icons";
 import ahmedHero from "@/assets/hero-portrait.png";
 
 export const Route = createFileRoute("/")({
@@ -70,7 +71,18 @@ function HomePage() {
       <section className="relative overflow-hidden bg-white pt-16 text-ink">
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_0%,color-mix(in_oklab,#6DAFFE_16%,transparent),transparent_58%),radial-gradient(ellipse_50%_40%_at_100%_20%,color-mix(in_oklab,#2F6BFD_10%,transparent),transparent_50%)]"
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-[55%]"
+          style={{
+            backgroundImage: [
+              "radial-gradient(ellipse 90% 80% at 50% 100%, color-mix(in oklab, #6DAFFE 32%, transparent), transparent 70%)",
+              "radial-gradient(ellipse 45% 70% at 12% 100%, color-mix(in oklab, #2F6BFD 26%, transparent), transparent 65%)",
+              "radial-gradient(ellipse 45% 70% at 88% 100%, color-mix(in oklab, #2F6BFD 26%, transparent), transparent 65%)",
+            ].join(", "),
+          }}
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -bottom-32 left-1/2 h-[280px] w-[min(920px,110%)] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,color-mix(in_oklab,#2F6BFD_35%,transparent),transparent_70%)] blur-3xl"
         />
         <div
           aria-hidden="true"
@@ -83,8 +95,9 @@ function HomePage() {
             WebkitMaskImage: "radial-gradient(ellipse at 50% 38%, black 10%, transparent 66%)",
           }}
         />
+        <HeroFloatingIcons />
         <div
-          className={`${pageWrap} relative flex min-h-[calc(100svh-4rem)] flex-col items-center justify-center pb-0 pt-16 text-center`}
+          className={`${pageWrap} relative z-10 flex min-h-[calc(100svh-4rem)] flex-col items-center justify-center pb-0 pt-16 text-center`}
         >
           <div className="flex max-w-xl flex-col items-center animate-[heroFade_700ms_ease-out_both]">
             <Availability />

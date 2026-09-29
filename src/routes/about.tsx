@@ -91,7 +91,7 @@ function About() {
           <aside className="lg:col-span-5 lg:border-l lg:border-line lg:pl-8">
             <p className="eyebrow">Current / Recent</p>
             <div className="surface-card relative mt-6 p-6">
-              <span className="absolute -left-[37px] top-8 hidden size-2 rounded-full bg-amber lg:block" />
+              <span className="absolute -left-[37px] top-8 hidden size-2 rounded-full bg-coral lg:block" />
               <p className="font-mono text-[9px] uppercase text-ink-soft">Product design practice</p>
               <h2 className="mt-3 font-serif text-2xl">UI/UX Engineer — Softbanz</h2>
               <p className="mt-4 text-sm leading-6 text-ink-soft">
@@ -114,7 +114,7 @@ function About() {
               <section key={group} className="surface-card p-6">
                 <div className="flex items-baseline justify-between border-b border-line pb-4">
                   <h3 className="font-serif text-xl">{group}</h3>
-                  <span className="rounded-full bg-amber px-2.5 py-0.5 font-mono text-[9px] font-semibold text-white">
+                  <span className="rounded-full bg-navy px-2.5 py-0.5 font-mono text-[9px] font-semibold text-white">
                     0{groupIndex + 1}
                   </span>
                 </div>

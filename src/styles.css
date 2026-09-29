@@ -5,8 +5,8 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Design system — sky blues
- * Primary #2F6BFD · Accent #6DAFFE · Soft #EDF6FF · Base #FFFFFF
+ * Design system — Blue + Soft Coral
+ * Brand #2F6BFD · Brand soft #6DAFFE · Accent coral #FF6B4A · Soft #F4F7FB · Footer #0B1220
  */
 
 @theme inline {
@@ -63,6 +63,9 @@
   --color-amber: var(--amber);
   --color-teal: var(--teal);
   --color-navy: var(--navy);
+  --color-coral: var(--coral);
+  --color-footer: var(--footer);
+  --color-soft: var(--soft);
   --color-visual: var(--visual);
   --color-visual-panel: var(--visual-panel);
   --color-visual-soft: var(--visual-soft);
@@ -73,28 +76,30 @@
 
 :root {
   --radius: 1rem;
-  /* Base white site background · Soft wash available as muted/accent */
+  /* Neutrals — cool gray, not blue wash */
   --paper: #ffffff;
-  --paper-2: #ffffff;
-  --soft: #edf6ff;
-  /* High-contrast text */
+  --paper-2: #f4f7fb;
+  --soft: #f4f7fb;
   --ink: #0f172a;
-  --ink-soft: #5b7a9d;
-  --line: #d4e6f7;
-  /* Accent #6DAFFE (buttons / CTA) · Primary #2F6BFD (brand / hero accents) */
-  --amber: #6daffe;
-  --teal: #2f6bfd;
+  --ink-soft: #5a6b7d;
+  --line: #e5edf5;
+  /* Brand blue + soft blue */
   --navy: #2f6bfd;
+  --amber: #6daffe;
+  /* Coral spark (mapped to teal utility for existing class names) */
+  --coral: #ff6b4a;
+  --teal: #ff6b4a;
+  --footer: #0b1220;
   --brand-from: #2f6bfd;
   --brand-to: #6daffe;
   --brand-gradient: linear-gradient(135deg, var(--brand-from) 0%, var(--brand-to) 100%);
-  --shadow-soft: 0 1px 2px rgb(47 107 253 / 0.06), 0 10px 28px -12px rgb(47 107 253 / 0.18);
-  --shadow-lift: 0 8px 24px -8px rgb(47 107 253 / 0.28);
+  --shadow-soft: 0 1px 2px rgb(15 23 42 / 0.04), 0 10px 28px -12px rgb(15 23 42 / 0.12);
+  --shadow-lift: 0 8px 24px -8px rgb(47 107 253 / 0.22);
   --glow-brand: 0 8px 22px -6px rgb(47 107 253 / 0.4), 0 4px 12px -4px rgb(109 175 254 / 0.35);
-  --visual: #edf6ff;
+  --visual: #f4f7fb;
   --visual-panel: #ffffff;
-  --visual-soft: #dceeff;
-  --visual-line: #b8d4f0;
+  --visual-soft: #e8eef5;
+  --visual-line: #d4e0ec;
   --visual-ink: #0f172a;
   --visual-accent: var(--navy);
   --background: #ffffff;
@@ -103,32 +108,32 @@
   --card-foreground: var(--ink);
   --popover: #ffffff;
   --popover-foreground: var(--ink);
-  --primary: var(--amber);
+  --primary: var(--navy);
   --primary-foreground: #ffffff;
-  --secondary: #edf6ff;
+  --secondary: var(--soft);
   --secondary-foreground: var(--ink);
-  --muted: #edf6ff;
+  --muted: var(--soft);
   --muted-foreground: var(--ink-soft);
-  --accent: #edf6ff;
+  --accent: var(--soft);
   --accent-foreground: var(--navy);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: #ffffff;
   --border: var(--line);
   --input: var(--line);
-  --ring: var(--amber);
+  --ring: var(--navy);
   --chart-1: var(--navy);
-  --chart-2: var(--amber);
+  --chart-2: var(--coral);
   --chart-3: #1e3a5f;
   --chart-4: #9bc7f5;
-  --chart-5: #6daffe;
+  --chart-5: var(--amber);
   --sidebar: #ffffff;
   --sidebar-foreground: var(--ink);
   --sidebar-primary: var(--navy);
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #edf6ff;
+  --sidebar-accent: var(--soft);
   --sidebar-accent-foreground: var(--ink);
   --sidebar-border: var(--line);
-  --sidebar-ring: var(--amber);
+  --sidebar-ring: var(--navy);
 }
 
 .dark {
@@ -304,13 +309,62 @@
 }
 
 @keyframes iconFloat {
-  0%, 100% { transform: translate(-50%, -50%) translateY(0); }
-  50% { transform: translate(-50%, -50%) translateY(-8px); }
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotate(-1.5deg) scale(1);
+  }
+  35% {
+    transform: translate3d(5px, -14px, 0) rotate(1.5deg) scale(1.04);
+  }
+  70% {
+    transform: translate3d(-4px, -6px, 0) rotate(-0.5deg) scale(1.02);
+  }
 }
 
 @keyframes iconFloatAlt {
-  0%, 100% { transform: translate(-50%, -50%) translateY(0) translateX(0); }
-  50% { transform: translate(-50%, -50%) translateY(-6px) translateX(3px); }
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotate(1deg) scale(1);
+  }
+  40% {
+    transform: translate3d(-6px, -12px, 0) rotate(-1.5deg) scale(1.03);
+  }
+  75% {
+    transform: translate3d(4px, -5px, 0) rotate(1deg) scale(1.015);
+  }
+}
+
+@keyframes iconFloatSoft {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  }
+  50% {
+    transform: translate3d(3px, -16px, 0) rotate(2deg) scale(1.05);
+  }
+}
+
+.hero-icon-drift {
+  animation: iconFloat 7s ease-in-out infinite;
+  will-change: transform;
+  transform-origin: center;
+}
+
+.hero-icon-drift-alt {
+  animation: iconFloatAlt 8.2s ease-in-out infinite;
+  will-change: transform;
+  transform-origin: center;
+}
+
+.hero-icon-drift-soft {
+  animation: iconFloatSoft 7.6s ease-in-out infinite;
+  will-change: transform;
+  transform-origin: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-icon-drift,
+  .hero-icon-drift-alt,
+  .hero-icon-drift-soft {
+    animation: none;
+  }
 }
 
 @keyframes orbitArmCw {

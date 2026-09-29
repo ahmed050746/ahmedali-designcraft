@@ -13,9 +13,9 @@ const buttonVariants = cva(
           "bg-[linear-gradient(135deg,#2F6BFD_0%,#6DAFFE_100%)] text-white shadow-[var(--glow-brand)] hover:-translate-y-0.5 hover:brightness-105 active:translate-y-0",
         destructive: "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
         outline:
-          "border border-line bg-white text-ink hover:-translate-y-0.5 hover:border-navy/35 hover:bg-[#EDF6FF] active:translate-y-0",
-        secondary: "bg-[#EDF6FF] text-navy shadow-sm hover:bg-[#dceeff]",
-        ghost: "hover:bg-[#EDF6FF] hover:text-navy",
+          "border border-line bg-white text-ink hover:-translate-y-0.5 hover:border-navy/35 hover:bg-soft active:translate-y-0",
+        secondary: "bg-soft text-navy shadow-sm hover:bg-[#e8eef5]",
+        ghost: "hover:bg-soft hover:text-navy",
         link: "text-navy underline-offset-4 hover:underline",
       },
       size: {

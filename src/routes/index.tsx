@@ -118,10 +118,10 @@ function HomePage() {
       <SelectedWorkSection />
 
       <DesignSystemSpecimen />
-      <section className="relative overflow-hidden bg-[#EDF6FF]/40">
+      <section className="relative overflow-hidden bg-soft">
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -right-24 top-16 h-72 w-72 rounded-full bg-[radial-gradient(circle,color-mix(in_oklab,#2F6BFD_12%,transparent),transparent_70%)] blur-2xl"
+          className="pointer-events-none absolute -right-24 top-16 h-72 w-72 rounded-full bg-[radial-gradient(circle,color-mix(in_oklab,#2F6BFD_10%,transparent),transparent_70%)] blur-2xl"
         />
         <div className={`${pageWrap} relative py-20 sm:py-24`}>
           <SectionHeading index="03 / Capabilities" title="What I Can Help With" />
@@ -135,7 +135,7 @@ function HomePage() {
       <section className="relative border-t border-line bg-white">
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -left-20 bottom-0 h-56 w-56 rounded-full bg-[radial-gradient(circle,color-mix(in_oklab,#6DAFFE_14%,transparent),transparent_70%)] blur-2xl"
+          className="pointer-events-none absolute -left-20 bottom-0 h-56 w-56 rounded-full bg-[radial-gradient(circle,color-mix(in_oklab,#FF6B4A_10%,transparent),transparent_70%)] blur-2xl"
         />
         <div className={`${pageWrap} relative py-20 sm:py-24`}>
           <SectionHeading index="05 / Insights" title="Notes from the work." />

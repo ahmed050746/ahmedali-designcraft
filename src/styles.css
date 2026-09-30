@@ -5,8 +5,9 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Design system — Blue + Soft Coral
- * Brand #2F6BFD · Brand soft #6DAFFE · Accent coral #FF6B4A · Soft #F4F7FB · Footer #0B1220
+ * Design system — Modern · Clean · Premium
+ * Ink #0F172A · Primary #2F6BFD · Soft blue #6DAFFE · Coral #FF6B4A
+ * Paper #FFFFFF · Soft #F4F7FB · Paper-2 #F8FAFC · Footer #0B1220
  */
 
 @theme inline {
@@ -15,6 +16,9 @@
   --font-mono: "Inter", "Plus Jakarta Sans", sans-serif;
   --font-display: "Plus Jakarta Sans", "Inter", sans-serif;
   --font-body: "Inter", "Plus Jakarta Sans", sans-serif;
+  /* Minimum type scale: text-xs floors at 14px */
+  --text-xs: 0.875rem;
+  --text-xs--line-height: 1.25rem;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -30,6 +34,7 @@
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-primary-light: var(--primary-light);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
@@ -58,11 +63,14 @@
   --color-paper: var(--paper);
   --color-paper-2: var(--paper-2);
   --color-ink: var(--ink);
+  --color-ink-hover: var(--ink-hover);
   --color-ink-soft: var(--ink-soft);
   --color-line: var(--line);
-  --color-amber: var(--amber);
-  --color-teal: var(--teal);
-  --color-navy: var(--navy);
+  --color-white: var(--white);
+  /* Compatibility aliases (legacy class names) */
+  --color-amber: var(--primary-light);
+  --color-teal: var(--coral);
+  --color-navy: var(--primary);
   --color-coral: var(--coral);
   --color-footer: var(--footer);
   --color-soft: var(--soft);
@@ -76,89 +84,115 @@
 
 :root {
   --radius: 1rem;
-  /* Neutrals — cool gray, not blue wash */
-  --paper: #ffffff;
-  --paper-2: #f4f7fb;
-  --soft: #f4f7fb;
-  --ink: #0f172a;
-  --ink-soft: #5a6b7d;
-  --line: #e5edf5;
-  /* Brand blue + soft blue */
-  --navy: #2f6bfd;
-  --amber: #6daffe;
-  /* Coral spark (mapped to teal utility for existing class names) */
+
+  /* Brand */
+  --primary: #2f6bfd;
+  --primary-light: #6daffe;
   --coral: #ff6b4a;
-  --teal: #ff6b4a;
+  --brand-from: var(--primary);
+  --brand-to: var(--primary-light);
+  --brand-gradient: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+
+  /* Dark / text */
+  --ink: #0f172a;
+  --ink-hover: #1e293b;
+  --ink-soft: #5a6b7d;
+  --white: #ffffff;
+
+  /* Backgrounds */
+  --paper: #ffffff;
+  --soft: #f4f7fb;
+  --paper-2: #f8fafc;
+
+  /* Borders */
+  --line: #e5edf5;
+
+  /* Footer */
   --footer: #0b1220;
-  --brand-from: #2f6bfd;
-  --brand-to: #6daffe;
-  --brand-gradient: linear-gradient(135deg, var(--brand-from) 0%, var(--brand-to) 100%);
+
+  /* Compatibility aliases — keep existing class names working */
+  --navy: var(--primary);
+  --amber: var(--primary-light);
+  --teal: var(--coral);
+
+  /* Elevation */
   --shadow-soft: 0 1px 2px rgb(15 23 42 / 0.04), 0 10px 28px -12px rgb(15 23 42 / 0.12);
-  --shadow-lift: 0 8px 24px -8px rgb(47 107 253 / 0.22);
-  --glow-brand: 0 8px 22px -6px rgb(47 107 253 / 0.4), 0 4px 12px -4px rgb(109 175 254 / 0.35);
-  --visual: #f4f7fb;
-  --visual-panel: #ffffff;
-  --visual-soft: #e8eef5;
-  --visual-line: #d4e0ec;
-  --visual-ink: #0f172a;
-  --visual-accent: var(--navy);
-  --background: #ffffff;
+  --shadow-lift: 0 8px 24px -8px rgb(15 23 42 / 0.18);
+  --glow-brand: 0 8px 22px -6px rgb(15 23 42 / 0.28);
+
+  /* Visual / specimen surfaces */
+  --visual: var(--soft);
+  --visual-panel: var(--paper);
+  --visual-soft: var(--paper-2);
+  --visual-line: var(--line);
+  --visual-ink: var(--ink);
+  --visual-accent: var(--primary);
+
+  /* shadcn semantic map */
+  --background: var(--paper);
   --foreground: var(--ink);
-  --card: #ffffff;
+  --card: var(--paper);
   --card-foreground: var(--ink);
-  --popover: #ffffff;
+  --popover: var(--paper);
   --popover-foreground: var(--ink);
-  --primary: var(--navy);
-  --primary-foreground: #ffffff;
+  --primary-foreground: var(--white);
   --secondary: var(--soft);
   --secondary-foreground: var(--ink);
   --muted: var(--soft);
   --muted-foreground: var(--ink-soft);
   --accent: var(--soft);
-  --accent-foreground: var(--navy);
+  --accent-foreground: var(--primary);
   --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: #ffffff;
+  --destructive-foreground: var(--white);
   --border: var(--line);
   --input: var(--line);
-  --ring: var(--navy);
-  --chart-1: var(--navy);
+  --ring: var(--primary);
+  --chart-1: var(--primary);
   --chart-2: var(--coral);
-  --chart-3: #1e3a5f;
-  --chart-4: #9bc7f5;
-  --chart-5: var(--amber);
-  --sidebar: #ffffff;
+  --chart-3: var(--ink);
+  --chart-4: var(--primary-light);
+  --chart-5: var(--primary-light);
+  --sidebar: var(--paper);
   --sidebar-foreground: var(--ink);
-  --sidebar-primary: var(--navy);
-  --sidebar-primary-foreground: #ffffff;
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--white);
   --sidebar-accent: var(--soft);
   --sidebar-accent-foreground: var(--ink);
   --sidebar-border: var(--line);
-  --sidebar-ring: var(--navy);
+  --sidebar-ring: var(--primary);
 }
 
 .dark {
-  --paper: var(--navy);
-  --paper-2: oklch(0.26 0.03 265);
-  --ink: oklch(0.98 0.005 247);
-  --ink-soft: oklch(0.72 0.02 255);
+  /* Dark surfaces use footer/ink — not brand blue */
+  --paper: #0b1220;
+  --paper-2: #1e293b;
+  --soft: #1e293b;
+  --ink: #f8fafc;
+  --ink-hover: #334155;
+  --ink-soft: #94a3b8;
   --line: oklch(1 0 0 / 12%);
-  --background: var(--navy);
+  --white: #ffffff;
+  --footer: #0b1220;
+  --background: var(--paper);
   --foreground: var(--ink);
-  --card: oklch(0.26 0.03 265);
+  --card: var(--paper-2);
   --card-foreground: var(--ink);
-  --popover: oklch(0.26 0.03 265);
+  --popover: var(--paper-2);
   --popover-foreground: var(--ink);
-  --primary: oklch(0.62 0.22 267);
-  --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.3 0.03 265);
+  --primary: #6daffe;
+  --primary-light: #2f6bfd;
+  --primary-foreground: #0b1220;
+  --secondary: var(--paper-2);
   --secondary-foreground: var(--ink);
-  --muted: oklch(0.3 0.03 265);
+  --muted: var(--paper-2);
   --muted-foreground: var(--ink-soft);
-  --accent: oklch(0.3 0.04 267);
+  --accent: var(--paper-2);
   --accent-foreground: var(--ink);
   --border: oklch(1 0 0 / 12%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.62 0.22 267);
+  --ring: var(--primary);
+  --navy: var(--primary);
+  --amber: var(--primary-light);
 }
 
 @layer base {
@@ -170,6 +204,7 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-body);
+    font-size: 0.875rem; /* 14px site minimum */
     letter-spacing: 0;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -183,18 +218,25 @@
 
   html { scroll-behavior: smooth; }
   a, button, input, textarea { outline-offset: 3px; }
-  :focus-visible { outline: 2px solid var(--navy); }
-  ::selection { background: color-mix(in oklab, var(--navy) 22%, white); color: var(--ink); }
+  :focus-visible { outline: 2px solid var(--primary); }
+  ::selection { background: color-mix(in oklab, var(--primary) 22%, white); color: var(--ink); }
+
+  a:not([class]) {
+    color: var(--primary);
+  }
+  a:not([class]):hover {
+    color: var(--ink);
+  }
 }
 
 @utility eyebrow {
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  line-height: 1rem;
+  font-size: 0.875rem; /* 14px min */
+  line-height: 1.25rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   font-weight: 700;
-  color: var(--navy);
+  color: var(--primary);
 }
 
 @utility specimen {
@@ -206,7 +248,7 @@
   transition: box-shadow 300ms ease, transform 300ms ease, border-color 300ms ease;
 }
 .specimen:hover {
-  border-color: color-mix(in oklab, var(--amber) 28%, var(--line));
+  border-color: color-mix(in oklab, var(--primary-light) 28%, var(--line));
   box-shadow: var(--shadow-lift);
   transform: translateY(-2px);
 }
@@ -214,19 +256,19 @@
 @utility surface-card {
   border: 1px solid var(--line);
   border-radius: 1rem;
-  background: #ffffff;
+  background: var(--paper);
   box-shadow: var(--shadow-soft);
   transition: box-shadow 300ms ease, transform 300ms ease, border-color 300ms ease;
 }
 .surface-card:hover {
-  border-color: color-mix(in oklab, var(--navy) 28%, var(--line));
+  border-color: color-mix(in oklab, var(--primary) 28%, var(--line));
   box-shadow: var(--shadow-lift);
   transform: translateY(-3px);
 }
 
 @utility spec-label {
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: 0.875rem; /* 14px min */
   letter-spacing: 0.06em;
   text-transform: uppercase;
   font-weight: 600;
@@ -243,7 +285,7 @@
 @utility form-label {
   display: block;
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: 0.875rem; /* 14px min */
   letter-spacing: 0.06em;
   text-transform: uppercase;
   font-weight: 600;
@@ -270,7 +312,7 @@
 }
 .group:hover .project-visual {
   transform: translateY(-4px);
-  border-color: color-mix(in oklab, var(--navy) 30%, var(--line));
+  border-color: color-mix(in oklab, var(--primary) 30%, var(--line));
   box-shadow: var(--shadow-lift);
 }
 
@@ -278,12 +320,12 @@
   overflow: hidden;
   border-radius: 1rem;
   border: 1px solid var(--line);
-  background: #ffffff;
+  background: var(--paper);
   box-shadow: var(--shadow-soft);
   transition: box-shadow 400ms ease, border-color 300ms ease, transform 400ms cubic-bezier(.2,.8,.2,1);
 }
 .group:hover .media-frame {
-  border-color: color-mix(in oklab, var(--navy) 28%, var(--line));
+  border-color: color-mix(in oklab, var(--primary) 28%, var(--line));
   box-shadow: var(--shadow-lift);
   transform: translateY(-3px);
 }

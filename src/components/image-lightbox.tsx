@@ -120,7 +120,7 @@ export function ImageLightbox({ open, onOpenChange, src, alt, title }: ImageLigh
           </DialogPrimitive.Description>
 
           <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex items-center justify-between gap-2 p-3 sm:p-4">
-            <p className="pointer-events-none rounded-full bg-ink/80 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.14em] text-paper/80">
+            <p className="pointer-events-none rounded-full bg-ink/80 px-3 py-1.5 font-mono text-[14px] uppercase tracking-[0.14em] text-paper/80">
               {natural.w > 0 ? `${natural.w}×${natural.h}` : "…"}
               {zoomSteps.length === 1 ? " · full res" : null}
             </p>
@@ -134,7 +134,7 @@ export function ImageLightbox({ open, onOpenChange, src, alt, title }: ImageLigh
               >
                 <ZoomOut className="size-4" />
               </button>
-              <span className="min-w-[3.5rem] text-center font-mono text-[10px] uppercase tracking-[0.12em]">
+              <span className="min-w-[3.5rem] text-center font-mono text-[14px] uppercase tracking-[0.12em]">
                 {zoomLabel}
               </span>
               <button
@@ -155,7 +155,7 @@ export function ImageLightbox({ open, onOpenChange, src, alt, title }: ImageLigh
                 <button
                   type="button"
                   onClick={toggleZoom}
-                  className="hidden rounded-full px-3 py-2 font-mono text-[10px] uppercase tracking-[0.12em] transition-colors hover:bg-paper/15 sm:block"
+                  className="hidden rounded-full px-3 py-2 font-mono text-[14px] uppercase tracking-[0.12em] transition-colors hover:bg-paper/15 sm:block"
                   aria-label={atActual ? "Fit to screen" : "View at native size"}
                 >
                   {atActual ? "Fit" : "1:1"}

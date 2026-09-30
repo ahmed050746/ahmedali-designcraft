@@ -42,7 +42,7 @@ function Insights() {
               params={{ slug: item.slug }}
               className="surface-card group p-7 sm:p-10"
             >
-              <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-ink-soft">
+              <p className="font-mono text-[14px] uppercase tracking-[0.14em] text-ink-soft">
                 {item.category} · {item.date} · {item.time}
               </p>
               <div className="mt-5 grid grid-cols-[minmax(0,1fr)_auto] gap-4">

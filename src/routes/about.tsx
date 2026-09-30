@@ -75,15 +75,15 @@ function About() {
             </div>
             <dl className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line shadow-[var(--shadow-soft)] sm:grid-cols-3">
               <div className="bg-paper-2 py-5 pl-5 pr-4">
-                <dt className="font-mono text-[9px] uppercase text-ink-soft">Focus</dt>
+                <dt className="font-mono text-[14px] uppercase text-ink-soft">Focus</dt>
                 <dd className="mt-2 text-sm font-semibold">Product interfaces</dd>
               </div>
               <div className="bg-paper-2 px-4 py-5">
-                <dt className="font-mono text-[9px] uppercase text-ink-soft">Approach</dt>
+                <dt className="font-mono text-[14px] uppercase text-ink-soft">Approach</dt>
                 <dd className="mt-2 text-sm font-semibold">Systems thinking</dd>
               </div>
               <div className="col-span-2 bg-paper-2 py-5 pl-5 sm:col-span-1 sm:pl-4">
-                <dt className="font-mono text-[9px] uppercase text-ink-soft">Bridge</dt>
+                <dt className="font-mono text-[14px] uppercase text-ink-soft">Bridge</dt>
                 <dd className="mt-2 text-sm font-semibold">Design + front-end</dd>
               </div>
             </dl>
@@ -92,7 +92,7 @@ function About() {
             <p className="eyebrow">Current / Recent</p>
             <div className="surface-card relative mt-6 p-6">
               <span className="absolute -left-[37px] top-8 hidden size-2 rounded-full bg-coral lg:block" />
-              <p className="font-mono text-[9px] uppercase text-ink-soft">Product design practice</p>
+              <p className="font-mono text-[14px] uppercase text-ink-soft">Product design practice</p>
               <h2 className="mt-3 font-serif text-2xl">UI/UX Engineer — Softbanz</h2>
               <p className="mt-4 text-sm leading-6 text-ink-soft">
                 Product interface design · SaaS/LMS design · Design systems · Responsive interfaces ·
@@ -114,7 +114,7 @@ function About() {
               <section key={group} className="surface-card p-6">
                 <div className="flex items-baseline justify-between border-b border-line pb-4">
                   <h3 className="font-serif text-xl">{group}</h3>
-                  <span className="rounded-full bg-navy px-2.5 py-0.5 font-mono text-[9px] font-semibold text-white">
+                  <span className="rounded-full bg-ink px-2.5 py-0.5 font-mono text-[14px] font-semibold text-white">
                     0{groupIndex + 1}
                   </span>
                 </div>
@@ -124,7 +124,7 @@ function About() {
                       key={item}
                       className="flex items-center gap-2 border-b border-line py-3 text-sm last:border-0"
                     >
-                      <span className="font-mono text-[8px] text-ink-soft">
+                      <span className="font-mono text-[14px] text-ink-soft">
                         {String(index + 1).padStart(2, "0")}
                       </span>
                       {item}

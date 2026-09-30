@@ -34,7 +34,7 @@ function IconShell({
 
 const HtmlIcon = () => (
   <IconShell className="bg-[#E44D26]">
-    <span className="font-mono text-[8px] font-black leading-none tracking-tight text-white sm:text-[9px]">
+    <span className="font-mono text-[14px] font-black leading-none tracking-tight text-white sm:text-[14px]">
       HTML
     </span>
   </IconShell>
@@ -42,7 +42,7 @@ const HtmlIcon = () => (
 
 const CssIcon = () => (
   <IconShell className="bg-[#264DE4]">
-    <span className="font-mono text-[8px] font-black leading-none tracking-tight text-white sm:text-[9px]">
+    <span className="font-mono text-[14px] font-black leading-none tracking-tight text-white sm:text-[14px]">
       CSS
     </span>
   </IconShell>
@@ -50,7 +50,7 @@ const CssIcon = () => (
 
 const JsIcon = () => (
   <IconShell className="bg-[#F7DF1E]">
-    <span className="font-mono text-[10px] font-black leading-none tracking-tight text-[#323330] sm:text-[11px]">
+    <span className="font-mono text-[14px] font-black leading-none tracking-tight text-[#323330] sm:text-[14px]">
       JS
     </span>
   </IconShell>

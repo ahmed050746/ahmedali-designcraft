@@ -39,11 +39,11 @@ function HeroVisual() {
     <div className="relative mx-auto mt-2 w-full max-w-[360px] sm:mt-3 sm:max-w-[480px] lg:max-w-[560px]">
       <div
         aria-hidden="true"
-        className="hero-orb pointer-events-none absolute left-[14%] top-[10%] h-[58%] w-[52%] rounded-full bg-[radial-gradient(circle,color-mix(in_oklab,#6DAFFE_32%,transparent),transparent_70%)] blur-3xl"
+        className="hero-orb pointer-events-none absolute left-[14%] top-[10%] h-[58%] w-[52%] rounded-full bg-[radial-gradient(circle,color-mix(in_oklab,var(--primary-light)_32%,transparent),transparent_70%)] blur-3xl"
       />
       <div
         aria-hidden="true"
-        className="hero-orb-delay pointer-events-none absolute bottom-[6%] right-[8%] h-[52%] w-[48%] rounded-full bg-[radial-gradient(circle,color-mix(in_oklab,#2F6BFD_22%,transparent),transparent_70%)] blur-3xl"
+        className="hero-orb-delay pointer-events-none absolute bottom-[6%] right-[8%] h-[52%] w-[48%] rounded-full bg-[radial-gradient(circle,color-mix(in_oklab,var(--primary)_22%,transparent),transparent_70%)] blur-3xl"
       />
       <div
         className="relative overflow-hidden"
@@ -91,9 +91,9 @@ function HomePage() {
             </h1>
             <span
               aria-hidden="true"
-              className="mt-4 h-1 w-16 rounded-full bg-[linear-gradient(90deg,#2F6BFD,#6DAFFE)]"
+              className="mt-4 h-1 w-16 rounded-full bg-[linear-gradient(90deg,var(--primary),var(--primary-light))]"
             />
-            <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.22em] text-ink-soft">
+            <p className="mt-4 font-mono text-[14px] uppercase tracking-[0.22em] text-ink-soft">
               UI/UX Engineer · Karachi
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
@@ -121,7 +121,7 @@ function HomePage() {
       <section className="relative overflow-hidden bg-soft">
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -right-24 top-16 h-72 w-72 rounded-full bg-[radial-gradient(circle,color-mix(in_oklab,#2F6BFD_10%,transparent),transparent_70%)] blur-2xl"
+          className="pointer-events-none absolute -right-24 top-16 h-72 w-72 rounded-full bg-[radial-gradient(circle,color-mix(in_oklab,var(--primary)_10%,transparent),transparent_70%)] blur-2xl"
         />
         <div className={`${pageWrap} relative py-20 sm:py-24`}>
           <SectionHeading index="03 / Capabilities" title="What I Can Help With" />
@@ -135,7 +135,7 @@ function HomePage() {
       <section className="relative border-t border-line bg-white">
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -left-20 bottom-0 h-56 w-56 rounded-full bg-[radial-gradient(circle,color-mix(in_oklab,#FF6B4A_10%,transparent),transparent_70%)] blur-2xl"
+          className="pointer-events-none absolute -left-20 bottom-0 h-56 w-56 rounded-full bg-[radial-gradient(circle,color-mix(in_oklab,var(--coral)_10%,transparent),transparent_70%)] blur-2xl"
         />
         <div className={`${pageWrap} relative py-20 sm:py-24`}>
           <SectionHeading index="05 / Insights" title="Notes from the work." />
@@ -147,7 +147,7 @@ function HomePage() {
                 params={{ slug: item.slug }}
                 className="surface-card group p-6 sm:p-7"
               >
-                <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-ink-soft">
+                <p className="font-mono text-[14px] uppercase tracking-[0.14em] text-ink-soft">
                   {item.category} · {item.time}
                 </p>
                 <h3 className="mt-3 max-w-[30ch] font-display text-xl font-bold transition-colors group-hover:text-navy">

@@ -91,9 +91,9 @@ function About() {
           <aside className="lg:col-span-5 lg:border-l lg:border-line lg:pl-8">
             <p className="eyebrow">Current / Recent</p>
             <div className="surface-card relative mt-6 p-6">
-              <span className="absolute -left-[37px] top-8 hidden size-2 rounded-full bg-coral lg:block" />
+              <span className="absolute -left-[37px] top-8 hidden size-2 rounded-full bg-blue lg:block" />
               <p className="font-mono text-[14px] uppercase text-ink-soft">Product design practice</p>
-              <h2 className="mt-3 font-serif text-2xl">UI/UX Engineer — Softbanz</h2>
+              <h2 className="mt-3 font-display text-2xl font-bold tracking-[-0.02em]">UI/UX Engineer — Softbanz</h2>
               <p className="mt-4 text-sm leading-6 text-ink-soft">
                 Product interface design · SaaS/LMS design · Design systems · Responsive interfaces ·
                 Figma workflows · Front-end collaboration · UI implementation understanding
@@ -113,7 +113,7 @@ function About() {
             {Object.entries(skills).map(([group, items], groupIndex) => (
               <section key={group} className="surface-card p-6">
                 <div className="flex items-baseline justify-between border-b border-line pb-4">
-                  <h3 className="font-serif text-xl">{group}</h3>
+                  <h3 className="font-display text-xl font-bold tracking-[-0.02em]">{group}</h3>
                   <span className="rounded-full bg-ink px-2.5 py-0.5 font-mono text-[14px] font-semibold text-white">
                     0{groupIndex + 1}
                   </span>

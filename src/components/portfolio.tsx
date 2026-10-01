@@ -20,53 +20,67 @@ export function SiteHeader() {
     { label: "Services", to: "/services" as const },
     { label: "Insights", to: "/insights" as const },
     { label: "Contact", to: "/contact" as const },
-  ];
+  ] as const;
+
+  const isNavActive = (label: (typeof nav)[number]["label"]) => {
+    if (label === "Work") {
+      return (
+        pathname === "/" ||
+        pathname.startsWith("/work/") ||
+        hash === "selected-work" ||
+        hash === "#selected-work"
+      );
+    }
+    if (label === "About") return pathname.startsWith("/about");
+    if (label === "Services") return pathname.startsWith("/services");
+    if (label === "Insights") return pathname.startsWith("/insights");
+    if (label === "Contact") return pathname.startsWith("/contact");
+    return false;
+  };
+
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-line/70 bg-paper/85 shadow-[0_1px_0_color-mix(in_oklab,var(--primary)_12%,transparent)] backdrop-blur-xl">
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-line bg-paper/95 backdrop-blur-md">
       <div className={`${pageWrap} grid h-16 grid-cols-[minmax(0,1fr)_auto] items-center gap-4`}>
         <Link
           to="/"
           className="group flex min-w-0 items-center gap-3"
           aria-label="Ahmed Ali — Home"
         >
-          <span className="grid size-9 shrink-0 place-items-center rounded-full bg-ink font-mono text-[14px] font-bold text-white shadow-[var(--glow-brand)] transition-transform group-hover:scale-105">
+          <span className="grid size-8 shrink-0 place-items-center rounded-md bg-ink font-mono text-[13px] font-bold text-white transition-colors group-hover:bg-blue">
             AA
           </span>
           <span className="min-w-0">
             <span className="block truncate font-sans text-[14px] font-semibold leading-none text-ink">
               Ahmed Ali
             </span>
-            <span className="mt-1 hidden font-mono text-[14px] uppercase tracking-[0.12em] text-ink-soft sm:block">
+            <span className="mt-1 hidden font-sans text-[12px] font-medium uppercase tracking-[0.06em] text-ink-soft sm:block">
               UI/UX Engineer
             </span>
           </span>
         </Link>
-        <nav className="hidden h-full items-center gap-1 md:flex" aria-label="Primary navigation">
+        <nav className="hidden h-full items-center gap-0.5 md:flex" aria-label="Primary navigation">
           {nav.map((item) => {
             const isWork = item.label === "Work";
             const isContact = item.label === "Contact";
-            const workActive =
-              hash === "selected-work" ||
-              hash === "#selected-work" ||
-              pathname.startsWith("/work/");
+            const active = isNavActive(item.label);
             return (
               <Link
                 key={item.label}
                 to={item.to}
                 {...(isWork ? { hash: "selected-work" as const } : {})}
-                {...(isWork || isContact
-                  ? {}
-                  : {
-                      activeProps: {
-                        className: "bg-soft text-navy shadow-sm",
-                      },
-                    })}
+                aria-current={active ? "page" : undefined}
                 className={cn(
-                  "relative flex h-9 items-center rounded-full px-3.5 font-mono text-[14px] uppercase tracking-[0.08em] transition-all",
+                  "relative flex h-9 items-center rounded-md px-3.5 font-sans text-[14px] font-medium tracking-normal transition-colors duration-200",
                   isContact
-                    ? "bg-ink font-semibold text-white shadow-[var(--glow-brand)] hover:bg-ink-hover"
-                    : "text-ink-soft hover:bg-soft hover:text-navy",
-                  isWork && workActive && "bg-soft text-navy shadow-sm",
+                    ? active
+                      ? "bg-blue font-semibold text-white"
+                      : "bg-ink font-semibold text-white hover:bg-blue"
+                    : active
+                      ? "font-semibold text-blue"
+                      : "text-ink-soft hover:text-blue",
+                  active &&
+                    !isContact &&
+                    "after:absolute after:inset-x-3.5 after:bottom-1 after:h-0.5 after:rounded-full after:bg-blue",
                 )}
               >
                 {item.label}
@@ -77,7 +91,7 @@ export function SiteHeader() {
         <Button
           variant="ghost"
           size="icon"
-          className="bg-ink text-white hover:bg-ink-hover hover:text-white md:hidden"
+          className="bg-ink text-white hover:bg-blue hover:text-white md:hidden"
           aria-label={open ? "Close menu" : "Open menu"}
           onClick={() => setOpen((value) => !value)}
         >
@@ -91,23 +105,22 @@ export function SiteHeader() {
         >
           {nav.map((item, index) => {
             const isWork = item.label === "Work";
-            const workActive =
-              hash === "selected-work" ||
-              hash === "#selected-work" ||
-              pathname.startsWith("/work/");
+            const active = isNavActive(item.label);
             return (
               <Link
                 key={item.label}
                 to={item.to}
                 {...(isWork ? { hash: "selected-work" as const } : {})}
-                {...(isWork ? {} : { activeProps: { className: "text-navy" } })}
+                aria-current={active ? "page" : undefined}
                 className={cn(
-                  "grid grid-cols-[2rem_1fr_auto] items-center border-b border-line py-3.5 font-mono text-sm uppercase last:border-0",
-                  isWork && workActive && "text-navy",
+                  "grid grid-cols-[2rem_1fr_auto] items-center border-b border-line py-3.5 font-sans text-sm font-medium last:border-0",
+                  active ? "text-blue" : "text-ink",
                 )}
               >
-                <span className="text-[14px] text-ink-soft">0{index + 1}</span>
-                <span>{item.label}</span>
+                <span className={cn("text-[14px]", active ? "text-blue" : "text-ink-soft")}>
+                  0{index + 1}
+                </span>
+                <span className={cn(active && "font-semibold")}>{item.label}</span>
                 <ArrowUpRight className="size-3.5" />
               </Link>
             );
@@ -121,18 +134,7 @@ export function SiteHeader() {
 export function SiteFooter() {
   return (
     <footer className="relative overflow-hidden bg-footer text-white">
-      <div
-        aria-hidden="true"
-        className="h-[3px] w-full bg-[linear-gradient(90deg,var(--primary)_0%,var(--primary-light)_45%,var(--coral)_100%)]"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -right-24 top-0 h-64 w-64 rounded-full bg-[radial-gradient(circle,color-mix(in_oklab,var(--coral)_22%,transparent),transparent_70%)] blur-2xl"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -left-16 bottom-0 h-48 w-48 rounded-full bg-[radial-gradient(circle,color-mix(in_oklab,var(--primary)_18%,transparent),transparent_70%)] blur-2xl"
-      />
+      <div aria-hidden="true" className="h-px w-full bg-white/10" />
       <div className={`${pageWrap} relative py-12 sm:py-14`}>
         <div className="flex flex-col justify-between gap-8 sm:flex-row sm:items-start">
           <div>
@@ -157,7 +159,7 @@ export function SiteFooter() {
             </Link>
             <Link
               to="/contact"
-              className="w-full text-center text-coral transition-colors hover:text-coral/80 sm:w-auto sm:text-left"
+              className="w-full text-center text-blue-hover transition-colors hover:text-white sm:w-auto sm:text-left"
             >
               Contact
             </Link>
@@ -187,16 +189,16 @@ export function PageIntro({
     <section className="relative overflow-hidden bg-paper pt-16">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_0%_0%,color-mix(in_oklab,var(--amber)_8%,transparent),transparent_55%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_0%_0%,color-mix(in_oklab,var(--blue)_6%,transparent),transparent_55%)]"
       />
       <div className={`${pageWrap} relative py-16 sm:py-24`}>
         <p className="eyebrow">
           {index} / {eyebrow}
         </p>
-        <h1 className="mt-5 max-w-[18ch] font-serif text-4xl leading-[1.04] tracking-[-0.03em] sm:text-6xl">
+        <h1 className="mt-5 max-w-[18ch] font-display text-[2.25rem] font-extrabold leading-[1.08] tracking-[-0.03em] sm:text-5xl lg:text-[3.5rem]">
           {title}
         </h1>
-        <div className="mt-6 max-w-[62ch] text-base leading-7 text-ink-soft">{children}</div>
+        <div className="mt-6 max-w-[62ch] text-base leading-[1.65] text-ink-soft sm:text-[17px]">{children}</div>
       </div>
     </section>
   );
@@ -214,12 +216,12 @@ export function SectionHeading({
   return (
     <div className="border-b border-line pb-6">
       <p className="eyebrow">{index}</p>
-      <h2 className="mt-3 font-serif text-3xl leading-tight tracking-[-0.03em] text-ink sm:text-4xl">
+      <h2 className="section-title mt-3 text-[1.875rem] text-ink sm:text-[2.5rem] lg:text-[3rem]">
         {title}
       </h2>
       <span
         aria-hidden="true"
-        className="mt-4 block h-1 w-12 rounded-full bg-[linear-gradient(90deg,var(--primary),var(--primary-light))]"
+        className="mt-4 block h-0.5 w-10 rounded-sm bg-ink"
       />
       {text && <p className="mt-3 max-w-[52ch] text-sm leading-6 text-ink-soft">{text}</p>}
     </div>
@@ -252,16 +254,16 @@ function BeforeAfterPair({
             className={cn(
               "mb-2 font-mono uppercase tracking-[0.14em]",
               compact ? "text-[14px]" : "text-[14px]",
-              label === "After" ? "text-coral" : "text-ink-soft",
+              label === "After" ? "text-blue" : "text-ink-soft",
             )}
           >
             {label}
           </figcaption>
           <div
             className={cn(
-              "relative overflow-hidden rounded-2xl border bg-paper shadow-sm",
+              "relative overflow-hidden rounded-xl border bg-paper",
               compact && "min-h-0 flex-1",
-              label === "After" ? "border-coral/45" : "border-line",
+              label === "After" ? "border-blue-border" : "border-line",
             )}
           >
             <img
@@ -301,7 +303,7 @@ export function ProjectVisual({ project, large = false }: { project: Project; la
               <button
                 type="button"
                 onClick={() => setLightboxOpen(true)}
-                className="group/visual relative block w-full cursor-zoom-in text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber"
+                className="group/visual relative block w-full cursor-zoom-in text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue"
                 aria-label={`View full ${project.name} image`}
               >
                 <img
@@ -351,7 +353,7 @@ export function ProjectVisual({ project, large = false }: { project: Project; la
 
 function ArchiveArrow() {
   return (
-    <span className="mt-1 grid size-9 shrink-0 place-items-center rounded-full border border-ink bg-ink text-white transition-colors group-hover:bg-ink-hover">
+    <span className="mt-1 grid size-9 shrink-0 place-items-center rounded-md border border-ink bg-ink text-white transition-colors group-hover:bg-blue">
       <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
     </span>
   );
@@ -362,7 +364,7 @@ function ProjectCover({ project, featured = false }: { project: Project; feature
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-2xl border border-line bg-paper-2 shadow-[var(--shadow-soft)]",
+        "relative overflow-hidden rounded-xl border border-line bg-paper-2",
         comparison
           ? featured
             ? "aspect-[5/4]"
@@ -394,12 +396,12 @@ function ProjectCopy({ project, featured = false }: { project: Project; featured
     <>
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="font-mono text-[14px] uppercase tracking-[0.16em] text-navy">
+          <p className="font-sans text-[13px] font-semibold uppercase tracking-[0.06em] text-blue">
             Project {project.number}
           </p>
           <h3
             className={cn(
-              "mt-2 font-display leading-[1.04] text-ink",
+              "project-title mt-2 text-ink",
               featured ? "text-4xl sm:text-5xl lg:max-w-[10ch] lg:text-[3.25rem]" : "text-[1.75rem] sm:text-[1.9rem]",
             )}
           >
@@ -408,18 +410,18 @@ function ProjectCopy({ project, featured = false }: { project: Project; featured
         </div>
         <ArchiveArrow />
       </div>
-      <p className="mt-4 max-w-[54ch] text-sm leading-6 text-ink-soft">{project.description}</p>
+      <p className="mt-4 max-w-[54ch] text-base leading-[1.65] text-ink-soft">{project.description}</p>
       <div className="mt-5 flex flex-wrap gap-1.5">
         {tags.map((tag) => (
           <span
             key={tag}
-            className="rounded-full bg-paper-2 px-2.5 py-1 font-mono text-[14px] uppercase tracking-[0.12em] text-ink-soft"
+            className="tag-blue"
           >
             {tag}
           </span>
         ))}
       </div>
-      <p className="mt-4 font-mono text-[14px] uppercase tracking-[0.14em] text-ink-soft">
+      <p className="mt-4 font-sans text-[13px] font-medium uppercase tracking-[0.05em] text-[#737373]">
         Role — <span className="text-ink">{project.role}</span>
       </p>
     </>
@@ -432,7 +434,7 @@ function FeaturedProject({ project, reversed = false }: { project: Project; reve
       <Link
         to="/work/$slug"
         params={{ slug: project.slug }}
-        className="group grid items-center gap-8 py-12 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber sm:py-16 lg:grid-cols-12 lg:gap-12"
+        className="group grid items-center gap-8 py-12 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue sm:py-16 lg:grid-cols-12 lg:gap-12"
       >
         <div className={cn("lg:col-span-7", reversed && "lg:col-start-6")}>
           <ProjectCover project={project} featured />
@@ -451,7 +453,7 @@ function CompactProject({ project }: { project: Project }) {
       <Link
         to="/work/$slug"
         params={{ slug: project.slug }}
-        className="group block py-12 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber sm:py-16"
+        className="group block py-12 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue sm:py-16"
       >
         <ProjectCover project={project} />
         <div className="mt-5">
@@ -545,10 +547,10 @@ export function SelectedWorkSection() {
       <div className={`${pageWrap} pb-16 pt-12 sm:pb-24 sm:pt-16 lg:pb-28 lg:pt-20`}>
         <div className="mb-8 max-w-2xl sm:mb-14">
           <p className="eyebrow">01 / Index</p>
-          <h2 className="mt-3 font-display text-[2.5rem] font-bold leading-[0.94] tracking-[-0.03em] text-ink sm:mt-4 sm:text-6xl lg:text-[4rem]">
+          <h2 className="section-title mt-3 text-[2.25rem] text-ink sm:mt-4 sm:text-[3rem] lg:text-[3.25rem]">
             Selected Work
           </h2>
-          <p className="mt-4 max-w-[48ch] text-sm leading-6 text-ink-soft sm:text-[15px] sm:leading-7">
+          <p className="mt-4 max-w-[48ch] text-base leading-[1.65] text-ink-soft sm:text-[17px]">
             A selection of interfaces, product experiences, and redesign work I&apos;ve
             contributed to.
           </p>
@@ -563,7 +565,7 @@ export function SelectedWorkSection() {
                 key={project.slug}
                 to="/work/$slug"
                 params={{ slug: project.slug }}
-                className="group block min-w-0 overflow-hidden rounded-2xl border border-line bg-paper shadow-[0_12px_40px_-24px_rgba(15,23,42,0.18)] transition active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber"
+                className="group block min-w-0 overflow-hidden rounded-xl border border-line bg-paper transition duration-250 hover:border-line-dark hover:shadow-[var(--shadow-lift)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue"
               >
                 <div className="relative aspect-[4/3] w-full overflow-hidden bg-paper-2 sm:aspect-[5/4]">
                   <img
@@ -572,21 +574,19 @@ export function SelectedWorkSection() {
                     width={1600}
                     height={1600}
                     loading={index === 0 ? "eager" : "lazy"}
-                    className="h-full w-full max-w-full object-cover object-center transition duration-500 group-hover:scale-[1.02]"
+                    className="h-full w-full max-w-full object-cover object-center transition duration-300 group-hover:scale-[1.02]"
                   />
                 </div>
 
                 <div className="p-4 sm:p-5">
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <p className="font-display text-xl font-bold tracking-[-0.02em] text-ink">
+                      <p className="project-title text-xl text-ink transition-colors group-hover:text-blue sm:text-[1.375rem]">
                         {project.name}
                       </p>
-                      <p className="mt-1 font-mono text-[14px] uppercase tracking-[0.14em] text-navy">
-                        {category}
-                      </p>
+                      <p className="tag-blue mt-2 inline-flex">{category}</p>
                     </div>
-                    <span className="grid size-10 shrink-0 place-items-center rounded-full bg-ink text-white transition group-hover:bg-ink-hover">
+                    <span className="grid size-9 shrink-0 place-items-center rounded-md bg-ink text-white transition-colors group-hover:bg-blue">
                       <ArrowUpRight className="size-4" />
                     </span>
                   </div>
@@ -594,7 +594,7 @@ export function SelectedWorkSection() {
                     {project.description}
                   </p>
                   <div className="mt-4 flex flex-wrap items-center gap-2">
-                    <span className="ml-auto inline-flex items-center gap-1 font-mono text-[14px] uppercase tracking-[0.14em] text-coral">
+                    <span className="ml-auto inline-flex items-center gap-1 font-mono text-[14px] uppercase tracking-[0.14em] text-blue">
                       Case study
                       <ArrowUpRight className="size-3.5" />
                     </span>
@@ -624,15 +624,15 @@ export function SelectedWorkSection() {
                   <li key={project.slug} className="relative">
                     <div
                       className={cn(
-                        "relative transition-all duration-300",
+                        "relative transition-all duration-250",
                         isActive &&
-                          "rounded-2xl border border-line bg-paper shadow-[0_10px_36px_-20px_rgba(15,23,42,0.2)]",
+                          "rounded-xl border border-line bg-paper",
                       )}
                     >
                       {isActive && (
                         <span
                           aria-hidden="true"
-                          className="absolute inset-y-3 left-0 w-[3px] rounded-full bg-[linear-gradient(180deg,var(--primary),var(--primary-light))]"
+                          className="absolute inset-y-3 left-0 w-[3px] rounded-full bg-blue"
                         />
                       )}
 
@@ -642,7 +642,7 @@ export function SelectedWorkSection() {
                         aria-expanded={isActive}
                         aria-controls={`work-panel-${project.slug}`}
                         className={cn(
-                          "group/item flex w-full items-start gap-5 text-left outline-none transition-all duration-300 focus-visible:ring-2 focus-visible:ring-navy/40 focus-visible:ring-offset-2",
+                          "group/item flex w-full items-start gap-5 text-left outline-none transition-colors duration-250 focus-visible:ring-2 focus-visible:ring-blue/30 focus-visible:ring-offset-2",
                           isActive
                             ? "px-6 pb-2 pt-6"
                             : "rounded-xl px-3 py-5 hover:bg-paper/80",
@@ -650,10 +650,10 @@ export function SelectedWorkSection() {
                       >
                         <span
                           className={cn(
-                            "relative z-[1] mt-0.5 grid size-10 shrink-0 place-items-center rounded-full font-mono text-[14px] font-bold tracking-wider transition-all duration-300",
+                            "relative z-[1] mt-0.5 grid size-9 shrink-0 place-items-center rounded-md font-mono text-[14px] font-bold tracking-wider transition-colors duration-250",
                             isActive
-                              ? "scale-105 bg-ink text-white shadow-[var(--glow-brand)]"
-                              : "border border-line bg-soft text-ink-soft group-hover/item:border-navy/30 group-hover/item:text-navy",
+                              ? "bg-ink text-white"
+                              : "border border-line bg-soft text-ink-soft group-hover/item:border-blue-border group-hover/item:text-blue",
                           )}
                         >
                           {project.number}
@@ -662,16 +662,16 @@ export function SelectedWorkSection() {
                         <span className="min-w-0 flex-1 pt-0.5">
                           <span
                             className={cn(
-                              "block font-display leading-snug tracking-[-0.025em] transition-colors duration-300",
+                              "project-title block transition-colors duration-200",
                               isActive
-                                ? "text-[1.35rem] font-bold text-ink"
+                                ? "text-[1.35rem] text-ink"
                                 : "text-xl font-semibold text-ink/55 group-hover/item:text-ink",
                             )}
                           >
                             {project.name}
                           </span>
                           {!isActive && (
-                            <span className="mt-1.5 block font-mono text-[14px] uppercase tracking-[0.16em] text-ink-soft/80 transition-colors group-hover/item:text-navy/70">
+                            <span className="mt-1.5 block font-sans text-[13px] font-medium uppercase tracking-[0.05em] text-ink-soft/80 transition-colors group-hover/item:text-blue">
                               {category}
                             </span>
                           )}
@@ -679,15 +679,15 @@ export function SelectedWorkSection() {
 
                         <span
                           className={cn(
-                            "mt-1 grid size-8 shrink-0 place-items-center rounded-full transition-all duration-300",
+                            "mt-1 grid size-8 shrink-0 place-items-center rounded-md transition-colors duration-250",
                             isActive
-                              ? "bg-soft text-navy"
-                              : "text-ink/25 group-hover/item:translate-x-0.5 group-hover/item:bg-paper group-hover/item:text-navy",
+                              ? "bg-blue-light text-blue"
+                              : "text-ink/25 group-hover/item:bg-paper group-hover/item:text-blue",
                           )}
                         >
                           <ArrowUpRight
                             className={cn(
-                              "size-3.5 transition-transform duration-300",
+                              "size-3.5 transition-transform duration-250",
                               isActive && "rotate-45",
                             )}
                           />
@@ -703,13 +703,11 @@ export function SelectedWorkSection() {
                             {project.description}
                           </p>
                           <div className="mt-4 flex flex-wrap items-center gap-2">
-                            <span className="rounded-full bg-soft px-2.5 py-1 font-mono text-[14px] uppercase tracking-[0.12em] text-navy">
-                              {category}
-                            </span>
+                            <span className="tag-blue">{category}</span>
                             <Link
                               to="/work/$slug"
                               params={{ slug: project.slug }}
-                              className="ml-auto inline-flex items-center gap-1 font-mono text-[14px] uppercase tracking-[0.14em] text-coral transition-colors hover:text-coral/80"
+                              className="ml-auto inline-flex items-center gap-1 font-mono text-[14px] uppercase tracking-[0.14em] text-blue transition-colors hover:text-blue-hover"
                             >
                               Case study
                               <ArrowUpRight className="size-3.5" />
@@ -732,7 +730,7 @@ export function SelectedWorkSection() {
               <Link
                 to="/work/$slug"
                 params={{ slug: activeProject.slug }}
-                className="group relative block overflow-hidden rounded-2xl border border-line bg-paper shadow-[0_12px_40px_-24px_rgba(15,23,42,0.2)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber"
+                className="group relative block overflow-hidden rounded-xl border border-line bg-paper transition duration-250 hover:border-line-dark hover:shadow-[var(--shadow-lift)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue"
               >
                 <div className="relative aspect-square w-full overflow-hidden bg-paper">
                   {items.map((project, index) => (
@@ -744,21 +742,21 @@ export function SelectedWorkSection() {
                       height={1600}
                       loading={index === 0 ? "eager" : "lazy"}
                       className={cn(
-                        "absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-500 ease-out",
+                        "absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-300 ease-out",
                         index === active ? "z-[1] opacity-100" : "z-0 opacity-0",
                       )}
                     />
                   ))}
-                  <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] flex items-end justify-between bg-gradient-to-t from-ink/60 via-ink/15 to-transparent px-7 pb-6 pt-16">
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] flex items-end justify-between bg-gradient-to-t from-ink/70 via-ink/20 to-transparent px-7 pb-6 pt-16">
                     <div className="min-w-0 pr-2">
                       <p className="font-mono text-[14px] uppercase tracking-[0.16em] text-white/70">
                         Project {activeProject.number} / {String(items.length).padStart(2, "0")}
                       </p>
-                      <p className="mt-1 font-display text-xl font-semibold text-white">
+                      <p className="mt-1 project-title text-xl text-white">
                         {activeProject.name}
                       </p>
                     </div>
-                    <span className="grid size-10 shrink-0 place-items-center rounded-full border border-ink bg-ink text-white transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:bg-ink-hover">
+                    <span className="grid size-9 shrink-0 place-items-center rounded-md bg-ink text-white transition-colors duration-250 group-hover:bg-blue">
                       <ArrowUpRight className="size-4" />
                     </span>
                   </div>
@@ -777,7 +775,7 @@ export function ServicesGrid() {
     <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
       {services.map(([name, text], index) => (
         <article key={name} className="surface-card p-5 sm:p-6">
-          <p className="font-mono text-[14px] font-semibold text-navy">
+          <p className="font-mono text-[14px] font-semibold text-blue">
             S/{String(index + 1).padStart(2, "0")}
           </p>
           <h3 className="mt-3 font-sans text-base font-semibold text-ink">{name}</h3>
@@ -790,13 +788,13 @@ export function ServicesGrid() {
 
 export function ProcessTimeline() {
   return (
-    <div className="mt-10 grid gap-px overflow-hidden rounded-2xl border border-line bg-line shadow-[var(--shadow-soft)] sm:grid-cols-2 lg:grid-cols-6">
+    <div className="mt-10 grid gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-6">
       {processSteps.map(([name, text], index) => (
         <article
           key={name}
           className="bg-paper p-5 transition-colors hover:bg-soft"
         >
-          <p className="inline-flex size-9 items-center justify-center rounded-full bg-ink font-mono text-[14px] font-bold text-white">
+          <p className="inline-flex size-8 items-center justify-center rounded-md bg-ink font-mono text-[14px] font-bold text-white">
             {String(index + 1).padStart(2, "0")}
           </p>
           <h3 className="mt-3 font-sans text-sm font-semibold text-ink">{name}</h3>
@@ -812,26 +810,26 @@ export function DesignSystemSpecimen() {
     <section className="border-y border-line bg-paper-2">
       <div className={`${pageWrap} py-20`}>
         <p className="eyebrow">02 / System thinking</p>
-        <h2 className="mt-5 max-w-[36ch] font-serif text-3xl leading-tight">
+        <h2 className="section-title mt-5 max-w-[36ch] text-[1.875rem] sm:text-[2.5rem]">
           Good interfaces become easier to scale when the rules behind them are clear.
         </h2>
         <div className="mt-10 grid gap-4 md:grid-cols-12">
           <div className="specimen md:col-span-4">
             <p className="spec-label">Typography scale</p>
-            <p className="mt-5 font-serif text-5xl font-bold">Aa</p>
-            <p className="mt-3 font-sans text-sm font-semibold">Plus Jakarta Sans</p>
-            <p className="font-body text-base">Inter</p>
-            <p className="font-mono text-[14px] font-semibold uppercase tracking-[0.14em]">Labels / UI mono</p>
+            <p className="mt-5 font-display text-5xl font-extrabold tracking-[-0.04em]">Aa</p>
+            <p className="mt-3 font-display text-sm font-semibold">Manrope — Display</p>
+            <p className="font-body text-base">Inter — Body / UI</p>
+            <p className="font-sans text-[13px] font-semibold uppercase tracking-[0.06em]">Labels / metadata</p>
           </div>
           <div className="specimen md:col-span-3">
             <p className="spec-label">Color tokens</p>
             <div className="mt-5 flex gap-2">
               <span className="swatch bg-paper border border-line" />
               <span className="swatch bg-ink" />
-              <span className="swatch bg-navy" />
-              <span className="swatch bg-coral" />
+              <span className="swatch bg-soft border border-line" />
+              <span className="swatch bg-blue" />
             </div>
-            <p className="mt-4 font-mono text-[14px] text-ink-soft">paper / ink / blue / coral</p>
+            <p className="mt-4 font-mono text-[14px] text-ink-soft">paper / black / soft / blue</p>
           </div>
           <div className="specimen md:col-span-5">
             <p className="spec-label">Product components</p>
@@ -840,11 +838,9 @@ export function DesignSystemSpecimen() {
               <Button size="sm" variant="outline">
                 Secondary
               </Button>
-              <span className="rounded-full bg-coral px-3 py-1 font-mono text-[14px] font-semibold text-white">
-                Accent
-              </span>
+              <span className="tag-blue">Accent</span>
             </div>
-            <Input className="mt-4 rounded-full" placeholder="Search records" />
+            <Input className="mt-4" placeholder="Search records" />
             <div className="mt-4 grid grid-cols-[1fr_auto] border-y border-line py-2 text-sm">
               <span>Responsive table row</span>
               <span className="text-ink-soft">Ready</span>
@@ -877,7 +873,7 @@ export function ContactMethods({
     <ul
       className={cn(
         "grid gap-px overflow-hidden",
-        cards ? "rounded-2xl bg-line shadow-[var(--shadow-soft)] sm:grid-cols-2" : "rounded-2xl shadow-[var(--shadow-soft)] sm:grid-cols-2 lg:grid-cols-4",
+        cards ? "rounded-xl bg-line sm:grid-cols-2" : "rounded-xl sm:grid-cols-2 lg:grid-cols-4",
         onInk ? "bg-paper/15" : "bg-line",
       )}
     >
@@ -892,7 +888,7 @@ export function ContactMethods({
           <>
             <span
               className={cn(
-                "grid shrink-0 place-items-center rounded-full border",
+                "grid shrink-0 place-items-center rounded-md border",
                 cards ? "size-10" : "size-8",
                 onInk
                   ? "border-paper/20 bg-white/10 text-paper"
@@ -948,10 +944,10 @@ export function ContactMethods({
 
 export function Availability() {
   return (
-    <span className="inline-flex items-center gap-2.5 rounded-full border border-navy/15 bg-soft px-4 py-2 font-mono text-[14px] font-semibold uppercase tracking-[0.14em] text-navy shadow-[0_0_0_4px_color-mix(in_oklab,var(--primary)_10%,transparent),var(--shadow-soft)]">
+    <span className="inline-flex items-center gap-2.5 rounded-md border border-blue-border bg-blue-light px-4 py-2 font-mono text-[13px] font-semibold uppercase tracking-[0.14em] text-blue">
       <span className="relative flex size-2.5 shrink-0" aria-hidden="true">
-        <span className="absolute inset-0 animate-ping rounded-full bg-coral opacity-40" />
-        <span className="relative m-auto size-2 rounded-full bg-coral ring-2 ring-white" />
+        <span className="absolute inset-0 animate-ping rounded-full bg-blue opacity-30" />
+        <span className="relative m-auto size-2 rounded-full bg-blue ring-2 ring-white" />
       </span>
       Available for selected work
     </span>

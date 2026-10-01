@@ -28,10 +28,10 @@ function Contact() {
             <p className="eyebrow">05 / Contact</p>
             <Availability />
           </div>
-          <h1 className="mt-6 max-w-[16ch] font-serif text-4xl leading-[1.04] sm:text-6xl">
+          <h1 className="hero-title mt-6 max-w-[16ch] text-[2.25rem] text-ink sm:text-[3rem] lg:text-[3.5rem]">
             Have a product that needs a better interface?
           </h1>
-          <p className="mt-6 max-w-[54ch] text-base leading-7 text-ink-soft">
+          <p className="mt-6 max-w-[54ch] text-base leading-[1.65] text-ink-soft sm:text-[17px]">
             Email, phone, and LinkedIn are the fastest ways to reach me. I work remotely and I am
             based in Karachi, Pakistan. Selected freelance work is welcome.
           </p>

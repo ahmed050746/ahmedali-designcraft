@@ -46,10 +46,10 @@ function Insights() {
                 {item.category} · {item.date} · {item.time}
               </p>
               <div className="mt-5 grid grid-cols-[minmax(0,1fr)_auto] gap-4">
-                <h2 className="font-serif text-2xl leading-tight group-hover:text-coral">
+                <h2 className="project-title text-2xl leading-tight group-hover:text-blue">
                   {item.title}
                 </h2>
-                <ArrowUpRight className="size-5 shrink-0 text-coral" />
+                <ArrowUpRight className="size-5 shrink-0 text-blue" />
               </div>
               <p className="mt-4 text-sm leading-6 text-ink-soft">{item.excerpt}</p>
             </Link>

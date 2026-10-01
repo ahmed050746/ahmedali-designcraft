@@ -25,7 +25,7 @@ function IconShell({
 }) {
   return (
     <span
-      className={`grid size-full place-items-center rounded-full border border-black/[0.06] shadow-[0_10px_28px_-12px_rgba(15,23,42,0.22),0_2px_8px_-2px_rgba(15,23,42,0.1)] transition-transform duration-300 hover:scale-110 ${className}`}
+      className={`grid size-full place-items-center rounded-md border border-line shadow-[var(--shadow-soft)] transition-transform duration-250 hover:scale-105 ${className}`}
     >
       {children}
     </span>
@@ -83,13 +83,13 @@ const FigmaIcon = () => (
 
 const ComponentIcon = () => (
   <IconShell>
-    <Component className="size-[48%] text-navy" strokeWidth={2.1} />
+    <Component className="size-[48%] text-ink" strokeWidth={2} />
   </IconShell>
 );
 
 const PrototypingIcon = () => (
   <IconShell className="bg-soft">
-    <PenTool className="size-[46%] text-navy" strokeWidth={2.1} />
+    <PenTool className="size-[46%] text-ink" strokeWidth={2} />
   </IconShell>
 );
 

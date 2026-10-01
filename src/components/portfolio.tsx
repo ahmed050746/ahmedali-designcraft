@@ -611,28 +611,24 @@ export function SelectedWorkSection() {
           className="hidden min-w-0 items-start gap-12 lg:grid lg:grid-cols-12 xl:gap-16"
         >
           <div className="min-w-0 lg:col-span-5 xl:col-span-4">
-            <ul className="relative flex flex-col">
-              <span
-                aria-hidden="true"
-                className="absolute bottom-4 left-[17px] top-4 w-px bg-gradient-to-b from-line via-line to-transparent"
-              />
-
+            <ul className="flex flex-col gap-1">
               {items.map((project, index) => {
                 const isActive = index === active;
                 const category = splitTokens(project.category)[0];
                 return (
-                  <li key={project.slug} className="relative">
+                  <li key={project.slug}>
                     <div
                       className={cn(
-                        "relative transition-all duration-250",
-                        isActive &&
-                          "rounded-xl border border-line bg-paper",
+                        "relative overflow-hidden rounded-xl transition-all duration-300",
+                        isActive
+                          ? "bg-paper shadow-[var(--shadow-lift)] ring-1 ring-line"
+                          : "hover:bg-paper/70",
                       )}
                     >
                       {isActive && (
                         <span
                           aria-hidden="true"
-                          className="absolute inset-y-3 left-0 w-[3px] rounded-full bg-blue"
+                          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_0%_0%,color-mix(in_oklab,var(--blue)_8%,transparent),transparent_55%)]"
                         />
                       )}
 
@@ -642,36 +638,36 @@ export function SelectedWorkSection() {
                         aria-expanded={isActive}
                         aria-controls={`work-panel-${project.slug}`}
                         className={cn(
-                          "group/item flex w-full items-start gap-5 text-left outline-none transition-colors duration-250 focus-visible:ring-2 focus-visible:ring-blue/30 focus-visible:ring-offset-2",
-                          isActive
-                            ? "px-6 pb-2 pt-6"
-                            : "rounded-xl px-3 py-5 hover:bg-paper/80",
+                          "group/item relative flex w-full items-start gap-4 text-left outline-none transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-blue/30 focus-visible:ring-offset-2",
+                          isActive ? "px-5 pb-2 pt-5" : "rounded-xl px-3 py-4",
                         )}
                       >
-                        <span
-                          className={cn(
-                            "relative z-[1] mt-0.5 grid size-9 shrink-0 place-items-center rounded-md font-mono text-[14px] font-bold tracking-wider transition-colors duration-250",
-                            isActive
-                              ? "bg-ink text-white"
-                              : "border border-line bg-soft text-ink-soft group-hover/item:border-blue-border group-hover/item:text-blue",
-                          )}
-                        >
-                          {project.number}
+                        <span className="relative mt-0.5 flex shrink-0 flex-col items-center">
+                          <span
+                            className={cn(
+                              "grid size-10 place-items-center rounded-lg font-sans text-[13px] font-bold tracking-wide transition-all duration-300",
+                              isActive
+                                ? "bg-ink text-white"
+                                : "bg-soft text-ink-soft group-hover/item:bg-blue-light group-hover/item:text-blue",
+                            )}
+                          >
+                            {project.number}
+                          </span>
                         </span>
 
-                        <span className="min-w-0 flex-1 pt-0.5">
+                        <span className="min-w-0 flex-1 pt-1">
                           <span
                             className={cn(
                               "project-title block transition-colors duration-200",
                               isActive
                                 ? "text-[1.35rem] text-ink"
-                                : "text-xl font-semibold text-ink/55 group-hover/item:text-ink",
+                                : "text-xl font-semibold text-ink/50 group-hover/item:text-ink",
                             )}
                           >
                             {project.name}
                           </span>
                           {!isActive && (
-                            <span className="mt-1.5 block font-sans text-[13px] font-medium uppercase tracking-[0.05em] text-ink-soft/80 transition-colors group-hover/item:text-blue">
+                            <span className="mt-1.5 block font-sans text-[13px] font-medium uppercase tracking-[0.05em] text-ink-soft/70 transition-colors group-hover/item:text-blue">
                               {category}
                             </span>
                           )}
@@ -679,25 +675,20 @@ export function SelectedWorkSection() {
 
                         <span
                           className={cn(
-                            "mt-1 grid size-8 shrink-0 place-items-center rounded-md transition-colors duration-250",
+                            "mt-1 grid size-8 shrink-0 place-items-center rounded-md transition-all duration-300",
                             isActive
-                              ? "bg-blue-light text-blue"
-                              : "text-ink/25 group-hover/item:bg-paper group-hover/item:text-blue",
+                              ? "translate-x-0.5 -translate-y-0.5 bg-blue text-white"
+                              : "text-ink/20 group-hover/item:bg-paper group-hover/item:text-blue",
                           )}
                         >
-                          <ArrowUpRight
-                            className={cn(
-                              "size-3.5 transition-transform duration-250",
-                              isActive && "rotate-45",
-                            )}
-                          />
+                          <ArrowUpRight className="size-3.5" />
                         </span>
                       </button>
 
                       {isActive && (
                         <div
                           id={`work-panel-${project.slug}`}
-                          className="animate-[heroFade_320ms_ease-out_both] px-6 pb-6 pl-[3.75rem]"
+                          className="animate-[heroFade_320ms_ease-out_both] relative px-5 pb-5 pl-[4.25rem]"
                         >
                           <p className="max-w-[42ch] text-sm leading-6 text-ink-soft">
                             {project.description}
@@ -707,7 +698,7 @@ export function SelectedWorkSection() {
                             <Link
                               to="/work/$slug"
                               params={{ slug: project.slug }}
-                              className="ml-auto inline-flex items-center gap-1 font-mono text-[14px] uppercase tracking-[0.14em] text-blue transition-colors hover:text-blue-hover"
+                              className="ml-auto inline-flex items-center gap-1 font-sans text-[13px] font-semibold uppercase tracking-[0.06em] text-blue transition-colors hover:text-blue-hover"
                             >
                               Case study
                               <ArrowUpRight className="size-3.5" />

@@ -291,6 +291,26 @@ export function ProjectVisual({ project, large = false }: { project: Project; la
   const src = large ? project.imageSrc : (project.screensSrc ?? projectCoverSrc(project));
   const alt = large ? project.imageAlt : (project.screensAlt ?? project.imageAlt);
   const canLightbox = !(comparison && large);
+  // Key Screens: fixed preview frame; full horizontal flow opens in lightbox.
+  const screensPreview = !large && Boolean(project.screensSrc);
+  // Wide multi-screen strips: tease cut-off content so click affordance is clear.
+  const screensFlowTease =
+    screensPreview &&
+    (project.slug === "edbanz" ||
+      project.slug === "dashboard-data-interfaces" ||
+      project.slug === "student-reward-marketplace");
+  const screensFlowLabel =
+    project.slug === "dashboard-data-interfaces"
+      ? "2 layouts"
+      : project.slug === "student-reward-marketplace"
+        ? "Full flow"
+        : "3 screens";
+  const screensFlowDots =
+    project.slug === "dashboard-data-interfaces"
+      ? 2
+      : project.slug === "student-reward-marketplace"
+        ? 4
+        : 3;
 
   return (
     <>
@@ -303,20 +323,64 @@ export function ProjectVisual({ project, large = false }: { project: Project; la
               <button
                 type="button"
                 onClick={() => setLightboxOpen(true)}
-                className="group/visual relative block w-full cursor-zoom-in text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue"
-                aria-label={`View full ${project.name} image`}
+                className={cn(
+                  "group/visual relative block w-full cursor-zoom-in text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue",
+                  large && "aspect-[16/10] overflow-hidden bg-paper-2",
+                  screensPreview && "aspect-[7/5] overflow-hidden bg-paper-2",
+                )}
+                aria-label={
+                  screensPreview
+                    ? `View full ${project.name} screen flow`
+                    : `View full ${project.name} image`
+                }
               >
-                <img
-                  src={src}
-                  alt={alt}
-                  loading="lazy"
-                  decoding="async"
-                  className={cn(
-                    "h-auto w-full transition-transform duration-500 group-hover/visual:scale-[1.01]",
-                    large && "aspect-[16/9] object-cover object-top",
-                  )}
-                  style={{ imageRendering: "auto" }}
-                />
+                {screensFlowTease ? (
+                  <>
+                    {/* Fill the frame; full multi-screen strip opens in lightbox */}
+                    <img
+                      src={src}
+                      alt={alt}
+                      loading="lazy"
+                      decoding="async"
+                      className="h-full w-full object-cover object-left transition-transform duration-500 group-hover/visual:scale-[1.01]"
+                      style={{ imageRendering: "auto" }}
+                    />
+                    <span
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-paper via-paper/70 to-transparent"
+                    />
+                    <span className="pointer-events-none absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-md bg-ink px-2.5 py-1 font-mono text-[12px] uppercase tracking-[0.12em] text-paper">
+                      <span className="inline-flex gap-0.5" aria-hidden="true">
+                        {Array.from({ length: screensFlowDots }).map((_, i) => (
+                          <span
+                            key={i}
+                            className={cn(
+                              "size-1.5 rounded-full",
+                              i === 0 ? "bg-blue" : "bg-paper/45",
+                            )}
+                          />
+                        ))}
+                      </span>
+                      {screensFlowLabel}
+                    </span>
+                  </>
+                ) : (
+                  <img
+                    src={src}
+                    alt={alt}
+                    loading="lazy"
+                    decoding="async"
+                    className={cn(
+                      "transition-transform duration-500 group-hover/visual:scale-[1.01]",
+                      large
+                        ? "h-full w-full object-cover object-top"
+                        : screensPreview
+                          ? "h-full w-full object-cover object-left"
+                          : "h-auto w-full",
+                    )}
+                    style={{ imageRendering: "auto" }}
+                  />
+                )}
               </button>
             ) : (
               <img
@@ -328,10 +392,17 @@ export function ProjectVisual({ project, large = false }: { project: Project; la
                 className="block h-auto w-full"
               />
             )}
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-ink/65 via-ink/25 to-transparent px-4 pb-3 pt-12 font-mono text-[14px] uppercase tracking-[0.14em] text-paper sm:px-6">
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] flex items-end justify-between bg-gradient-to-t from-ink/70 via-ink/25 to-transparent px-4 pb-3 pt-12 font-mono text-[14px] uppercase tracking-[0.14em] text-paper sm:px-6">
               <span>{project.name}</span>
-              <span>
-                {project.number} / {String(projects.length).padStart(2, "0")}
+              <span className="inline-flex items-center gap-1">
+                {screensPreview ? (
+                  <>
+                    Full flow
+                    <ArrowUpRight className="size-3.5 opacity-90" />
+                  </>
+                ) : (
+                  `${project.number} / ${String(projects.length).padStart(2, "0")}`
+                )}
               </span>
             </div>
           </>
@@ -567,14 +638,16 @@ export function SelectedWorkSection() {
                 params={{ slug: project.slug }}
                 className="group block min-w-0 overflow-hidden rounded-xl border border-line bg-paper transition duration-250 hover:border-line-dark hover:shadow-[var(--shadow-lift)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue"
               >
-                <div className="relative aspect-[4/3] w-full overflow-hidden bg-paper-2 sm:aspect-[5/4]">
+                <div className="relative aspect-[16/10] w-full overflow-hidden bg-paper-2">
                   <img
                     src={projectCoverSrc(project)}
                     alt={projectCoverAlt(project)}
                     width={1600}
-                    height={1600}
+                    height={1000}
                     loading={index === 0 ? "eager" : "lazy"}
-                    className="h-full w-full max-w-full object-cover object-center transition duration-300 group-hover:scale-[1.02]"
+                    decoding="async"
+                    className="h-full w-full max-w-full object-cover object-top transition duration-300 group-hover:scale-[1.02]"
+                    style={{ imageRendering: "auto" }}
                   />
                 </div>
 
@@ -723,19 +796,21 @@ export function SelectedWorkSection() {
                 params={{ slug: activeProject.slug }}
                 className="group relative block overflow-hidden rounded-xl border border-line bg-paper transition duration-250 hover:border-line-dark hover:shadow-[var(--shadow-lift)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue"
               >
-                <div className="relative aspect-square w-full overflow-hidden bg-paper">
+                <div className="relative aspect-[16/10] w-full overflow-hidden bg-paper-2">
                   {items.map((project, index) => (
                     <img
                       key={project.slug}
                       src={projectCoverSrc(project)}
                       alt={projectCoverAlt(project)}
                       width={1600}
-                      height={1600}
+                      height={1000}
                       loading={index === 0 ? "eager" : "lazy"}
+                      decoding="async"
                       className={cn(
-                        "absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-300 ease-out",
+                        "absolute inset-0 h-full w-full object-cover object-top transition-opacity duration-300 ease-out",
                         index === active ? "z-[1] opacity-100" : "z-0 opacity-0",
                       )}
+                      style={{ imageRendering: "auto" }}
                     />
                   ))}
                   <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] flex items-end justify-between bg-gradient-to-t from-ink/70 via-ink/20 to-transparent px-7 pb-6 pt-16">

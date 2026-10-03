@@ -1,4 +1,5 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Availability,
@@ -139,21 +140,34 @@ function HomePage() {
         />
         <div className={`${pageWrap} relative py-20 sm:py-24`}>
           <SectionHeading index="05 / Insights" title="Notes from the work." />
-          <div className="mt-10 grid gap-5 overflow-hidden md:grid-cols-2">
+          <div className="mt-10 grid gap-5 md:grid-cols-2">
             {insights.map((item) => (
               <Link
                 key={item.slug}
                 to="/insights/$slug"
                 params={{ slug: item.slug }}
-                className="surface-card group p-6 sm:p-7"
+                className="surface-card group flex h-full flex-col p-6 sm:p-7"
               >
-                <p className="font-mono text-[14px] uppercase tracking-[0.14em] text-ink-soft">
-                  {item.category} · {item.time}
-                </p>
-                <h3 className="project-title mt-3 max-w-[30ch] text-xl transition-colors group-hover:text-blue">
+                <div className="flex items-start justify-between gap-4">
+                  <p className="font-sans text-[12px] font-semibold uppercase tracking-[0.08em] text-ink-soft">
+                    {item.category} · {item.time}
+                  </p>
+                  <span className="grid size-8 shrink-0 place-items-center rounded-full bg-blue-light text-blue transition-colors group-hover:bg-blue group-hover:text-white">
+                    <ArrowUpRight className="size-4" />
+                  </span>
+                </div>
+                <h3 className="mt-5 font-sans text-xl font-semibold leading-snug text-ink">
                   {item.title}
                 </h3>
-                <p className="mt-2 text-sm leading-6 text-ink-soft">{item.excerpt}</p>
+                <p className="mt-3 text-sm leading-6 text-ink-soft">{item.excerpt}</p>
+                <div className="mt-auto pt-6">
+                  <div className="flex items-center border-t border-line pt-4">
+                    <span className="inline-flex items-center gap-1.5 font-sans text-sm font-semibold text-blue">
+                      Read Article
+                      <ArrowRight className="size-4" />
+                    </span>
+                  </div>
+                </div>
               </Link>
             ))}
           </div>

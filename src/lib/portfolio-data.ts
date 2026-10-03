@@ -4,6 +4,7 @@ export type Project = {
   name: string;
   category: string;
   description: string;
+  summary?: string;
   role: string;
   contribution: string;
   platform: string;
@@ -32,6 +33,7 @@ export const projects: Project[] = [
     name: "AI Assistant",
     category: "SaaS · LMS · EdTech · Product Design",
     description: "An AI-powered workspace helping educators instantly generate course content, lesson plans, quizzes, and detailed student performance analytics with ease.",
+    summary: "An AI workspace for course content, lesson plans, quizzes, and student performance analytics.",
     role: "UI/UX Engineer · Product Designer",
     contribution: "Designed the product experience from the ground up, including major platform interfaces, dashboards, virtual classroom experiences, academic workflows, and responsive layouts.",
     platform: "Web platform",
@@ -54,6 +56,7 @@ export const projects: Project[] = [
     name: "Gamified Battle Arena Results",
     category: "Gamification · Product Design · SaaS",
     description: "A gamified learning interface that boosts student participation and motivation through live battle results, team performance graphs, and final leaderboards.",
+    summary: "Live battle results, team performance, and leaderboards that keep competitive outcomes easy to scan.",
     role: "UI/UX Designer",
     contribution: "Designed results and ranking interfaces that make competitive outcomes easy to scan—highlighting winners, stats, and next actions without overwhelming the player.",
     platform: "Web · Product interface",
@@ -80,6 +83,7 @@ export const projects: Project[] = [
     name: "Student Reward Marketplace",
     category: "EdTech · Marketplace · Gamification · SaaS",
     description: "A gamified motivation ecosystem where teachers and management award Novas coins for high performance, top attendance, and timely assignments. Students can redeem these earned coins in the campus marketplace for personalized LMS themes, cafeteria items, and essential stationery.",
+    summary: "Students redeem Novas coins for themes, cafeteria items, and stationery in a campus marketplace.",
     role: "UI/UX Designer",
     contribution: "Designed marketplace and reward-redemption flows that keep catalogs scannable, balances clear, and redemption steps simple for students.",
     platform: "Web application",
@@ -106,6 +110,7 @@ export const projects: Project[] = [
     name: "Dashboard & Data Interfaces",
     category: "Dashboard · SaaS · Data Visualization",
     description: "Centralized dashboard organizing announcements, class schedules, course activities, and academic metrics seamlessly.",
+    summary: "Announcements, class schedules, course activity, and academic metrics in one dashboard.",
     role: "UI/UX Engineer",
     contribution: "Explored information architecture, visual hierarchy, chart framing, tables, filtering patterns, and responsive states across selected dashboard concepts.",
     platform: "Web dashboards",
@@ -126,6 +131,7 @@ export const projects: Project[] = [
     name: "Connected Learning Ecosystem",
     category: "EdTech · Mobile · SaaS · Product Design",
     description: "An AI-powered mobile education platform seamlessly connecting teachers, students, parents, and management to deliver real-time classroom interactions, progress tracking, and academic insights.",
+    summary: "A mobile platform linking teachers, students, parents, and management in real time.",
     role: "UI/UX Designer · Product Designer",
     contribution: "Designed multi-audience product narratives and App Store–ready compositions that show live teaching, parent visibility, and AI progress reporting as one coherent mobile ecosystem.",
     platform: "iOS · Mobile product",

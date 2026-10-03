@@ -5,8 +5,8 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Design system — Enterprise UI/UX Engineer portfolio
- * Black #0A0A0A · Blue #2563EB · Neutrals white/gray
+ * Design system — Ahmed Ali portfolio tokens
+ * Ink #0F1419 · Primary #6366F1 · Page #FAFBFD
  * Typography: Manrope (display) + Inter (body/UI)
  */
 
@@ -89,40 +89,40 @@
 }
 
 :root {
-  /* 8px control radius; cards use rounded-xl (12px) in components */
-  --radius: 0.5rem;
+  /* Controls are pills; cards use rounded-2xl / rounded-3xl */
+  --radius: 0.75rem;
 
-  /* Black — primary brand */
-  --ink: #0a0a0a;
-  --ink-hover: #171717;
-  --ink-muted: #262626;
-  --ink-soft: #525252;
-  --text-muted: #737373;
-  --text-faint: #a3a3a3;
+  /* Ink — foreground */
+  --ink: #0f1419;
+  --ink-hover: #1c242c;
+  --ink-muted: #2a3138;
+  --ink-soft: #5c6570;
+  --text-muted: #6b7280;
+  --text-faint: #9ca3af;
   --white: #ffffff;
 
-  /* Blue — controlled accent */
-  --blue: #2563eb;
-  --blue-hover: #3b82f6;
-  --blue-light: #eff6ff;
-  --blue-border: #dbeafe;
-  --blue-soft: #dbeafe;
+  /* Primary — indigo */
+  --blue: #6366f1;
+  --blue-hover: #4f46e5;
+  --blue-light: #eef2ff;
+  --blue-border: #c7d2fe;
+  --blue-soft: #e0e7ff;
 
-  /* Legacy / shadcn “primary” = blue accent (links, tags, focus) */
+  /* Legacy / shadcn “primary” = indigo accent (links, tags, focus) */
   --primary: var(--blue);
   --primary-light: var(--blue-hover);
   --coral: var(--blue);
   --brand-from: var(--ink);
   --brand-to: var(--blue);
-  --brand-gradient: linear-gradient(135deg, var(--ink) 0%, var(--ink-muted) 100%);
+  --brand-gradient: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
 
-  /* Backgrounds */
+  /* Backgrounds — page is cool off-white, cards stay white */
   --paper: #ffffff;
-  --paper-2: #f8fafc;
-  --soft: #f5f7fa;
+  --paper-2: #f7f8fa;
+  --soft: #f3f4f6;
 
   /* Borders */
-  --line: #e5e7eb;
+  --line: #e6e7eb;
   --line-dark: #d1d5db;
 
   /* Dark sections / footer */
@@ -147,7 +147,7 @@
   --visual-accent: var(--blue);
 
   /* shadcn semantic map */
-  --background: var(--paper);
+  --background: #fafbfd;
   --foreground: #111111;
   --card: var(--paper);
   --card-foreground: #111111;
@@ -196,13 +196,13 @@
   --card-foreground: var(--ink);
   --popover: var(--paper-2);
   --popover-foreground: var(--ink);
-  --primary: #3b82f6;
-  --primary-light: #60a5fa;
-  --primary-foreground: #0a0a0a;
-  --blue: #3b82f6;
-  --blue-hover: #60a5fa;
-  --blue-light: #172554;
-  --blue-border: #1e3a8a;
+  --primary: #818cf8;
+  --primary-light: #a5b4fc;
+  --primary-foreground: #0f1419;
+  --blue: #818cf8;
+  --blue-hover: #a5b4fc;
+  --blue-light: #1e1b4b;
+  --blue-border: #3730a3;
   --secondary: var(--paper-2);
   --secondary-foreground: var(--ink);
   --muted: var(--paper-2);
@@ -366,13 +366,12 @@
   border: 1px solid var(--blue-border);
   background: var(--blue-light);
   color: var(--blue);
-  border-radius: 0.375rem;
-  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  padding: 0.25rem 0.75rem;
   font-family: var(--font-body);
   font-size: 0.8125rem;
   font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .project-visual {

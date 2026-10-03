@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { Menu, X, ArrowUpRight, Mail, Phone, Linkedin, MapPin } from "lucide-react";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { ImageLightbox } from "@/components/image-lightbox";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -70,11 +70,11 @@ export function SiteHeader() {
                 {...(isWork ? { hash: "selected-work" as const } : {})}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "relative flex h-9 items-center rounded-md px-3.5 font-sans text-[14px] font-medium tracking-normal transition-colors duration-200",
+                  "relative flex h-9 items-center rounded-full px-3.5 font-sans text-[14px] font-medium tracking-normal transition-colors duration-200",
                   isContact
                     ? active
-                      ? "bg-blue font-semibold text-white"
-                      : "bg-ink font-semibold text-white hover:bg-blue"
+                      ? "bg-blue-hover font-semibold text-white"
+                      : "bg-blue font-semibold text-white hover:bg-blue-hover"
                     : active
                       ? "font-semibold text-blue"
                       : "text-ink-soft hover:text-blue",
@@ -593,244 +593,127 @@ function projectCoverAlt(project: Project) {
   return project.coverAlt ?? project.imageAlt;
 }
 
-export function SelectedWorkSection() {
-  const items = projects;
-  const [active, setActive] = useState(0);
-  const stageRef = useRef<HTMLDivElement>(null);
-  const previewRef = useRef<HTMLDivElement>(null);
-  const NAV_OFFSET = 72;
-  const activeProject = items[active] ?? items[0];
+function projectCategory(project: Project) {
+  return (splitTokens(project.category)[0] ?? "Project").toUpperCase();
+}
 
-  const selectProject = (index: number) => {
-    if (index === active) return;
-    const stage = stageRef.current;
-    if (stage && window.matchMedia("(min-width: 1024px)").matches) {
-      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const behavior: ScrollBehavior = prefersReducedMotion ? "auto" : "smooth";
-      const stageTop = stage.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo({ top: Math.max(0, stageTop - NAV_OFFSET), behavior });
-    }
-    setActive(index);
-  };
+function FeaturedWorkCard({ project }: { project: Project }) {
+  const category = projectCategory(project);
 
   return (
-    <section id="selected-work" className="scroll-mt-16 overflow-x-clip bg-soft">
-      <div className={`${pageWrap} pb-16 pt-12 sm:pb-24 sm:pt-16 lg:pb-28 lg:pt-20`}>
-        <div className="mb-8 max-w-2xl sm:mb-14">
-          <p className="eyebrow">01 / Index</p>
-          <h2 className="section-title mt-3 text-[2.25rem] text-ink sm:mt-4 sm:text-[3rem] lg:text-[3.25rem]">
-            Selected Work
-          </h2>
-          <p className="mt-4 max-w-[48ch] text-base leading-[1.65] text-ink-soft sm:text-[17px]">
+    <Link
+      to="/work/$slug"
+      params={{ slug: project.slug }}
+      className="group grid overflow-hidden rounded-[0.75rem] bg-white p-3 shadow-[0_24px_60px_-32px_rgba(10,10,10,0.45)] transition duration-300 hover:shadow-[0_28px_70px_-28px_rgba(10,10,10,0.5)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue sm:p-4 lg:grid-cols-[minmax(280px,380px)_minmax(0,1fr)] lg:p-5"
+    >
+      <div className="flex flex-col px-4 py-6 sm:px-6 sm:py-8 lg:px-7 lg:py-8">
+        <div className="flex items-center gap-4">
+          <span className="grid size-10 shrink-0 place-items-center rounded-full bg-ink font-sans text-[13px] font-bold text-white">
+            {project.number}
+          </span>
+          <span aria-hidden="true" className="h-px min-w-6 flex-1 bg-line" />
+          <span className="font-sans text-[13px] font-semibold uppercase tracking-[0.14em] text-blue">
+            {category}
+          </span>
+        </div>
+
+        <h3 className="project-title mt-8 text-[1.85rem] leading-[1.12] text-ink sm:text-[2.15rem]">
+          {project.name}
+        </h3>
+        <p className="mt-4 text-sm leading-6 text-ink-soft sm:text-[15px] sm:leading-7">
+          {project.description}
+        </p>
+
+        <div className="mt-6 flex flex-wrap gap-2">
+          <span className="tag-blue">{category}</span>
+          <span className="tag-blue">Case study</span>
+        </div>
+
+        <span className="mt-8 inline-flex w-fit items-center gap-2 rounded-full bg-blue px-5 py-2.5 font-sans text-sm font-semibold text-white transition-colors group-hover:bg-blue-hover">
+          View Case Study
+          <ArrowUpRight className="size-4" />
+        </span>
+      </div>
+
+      <div className="relative mt-2 min-h-[240px] overflow-hidden rounded-[0.5rem] bg-[#eef1f4] shadow-[0_16px_40px_-18px_rgba(15,23,42,0.45)] sm:min-h-[320px] lg:mt-0 lg:min-h-[460px]">
+        <img
+          src={projectCoverSrc(project)}
+          alt={projectCoverAlt(project)}
+          width={1600}
+          height={1000}
+          loading="eager"
+          decoding="async"
+          className="absolute inset-0 h-full w-full object-cover object-center transition duration-500 group-hover:scale-[1.015]"
+        />
+      </div>
+    </Link>
+  );
+}
+
+function WorkIndexCard({ project }: { project: Project }) {
+  const category = projectCategory(project);
+
+  return (
+    <Link
+      to="/work/$slug"
+      params={{ slug: project.slug }}
+      className="group flex h-full min-h-[280px] flex-col rounded-[0.75rem] bg-white p-6 shadow-[0_12px_32px_-20px_rgba(10,10,10,0.28)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-18px_rgba(10,10,10,0.32)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue"
+    >
+      <div className="flex items-center justify-between gap-3 font-sans text-[12px] font-semibold uppercase tracking-[0.14em] text-[#9ca3af]">
+        <span>{project.number}</span>
+        <span className="truncate text-right">{category}</span>
+      </div>
+      <h3 className="project-title mt-6 text-balance text-[1.15rem] leading-snug text-ink">
+        {project.name}
+      </h3>
+      <p className="mt-3 text-sm leading-6 text-ink-soft">
+        {project.summary ?? project.description}
+      </p>
+      <div className="mt-auto pt-8">
+        <div className="flex items-center justify-between gap-3 border-t border-line pt-4">
+          <span className="font-sans text-sm font-semibold text-blue">View Project</span>
+          <span className="grid size-9 shrink-0 place-items-center rounded-full border border-line text-ink transition-colors group-hover:border-blue group-hover:bg-blue group-hover:text-white">
+            <ArrowUpRight className="size-4" />
+          </span>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+export function SelectedWorkSection() {
+  const featured =
+    projects.find((project) => project.slug === "connected-learning-ecosystem") ?? projects[0];
+  const rest = featured ? projects.filter((project) => project.slug !== featured.slug) : [];
+
+  if (!featured) return null;
+
+  return (
+    <section id="selected-work" className="scroll-mt-16 bg-background">
+      <div className={`${pageWrap} pb-8 pt-10 sm:pb-10 sm:pt-14 lg:pb-12 lg:pt-16`}>
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <p className="eyebrow">01 / Index</p>
+            <h2 className="mt-3 font-display text-[2.75rem] font-extrabold leading-[0.92] tracking-[-0.045em] text-ink sm:text-6xl lg:text-[4.75rem]">
+              Selected Work
+            </h2>
+          </div>
+          <p className="max-w-[34ch] text-sm leading-6 text-ink-soft sm:text-[15px] sm:leading-7 lg:pb-2 lg:text-right">
             A selection of interfaces, product experiences, and redesign work I&apos;ve
             contributed to.
           </p>
         </div>
+      </div>
 
-        {/* Mobile: image + card stack, tap opens case study */}
-        <div className="flex flex-col gap-8 lg:hidden">
-          {items.map((project, index) => {
-            const category = splitTokens(project.category)[0];
-            return (
-              <Link
-                key={project.slug}
-                to="/work/$slug"
-                params={{ slug: project.slug }}
-                className="group block min-w-0 overflow-hidden rounded-xl border border-line bg-paper transition duration-250 hover:border-line-dark hover:shadow-[var(--shadow-lift)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue"
-              >
-                <div className="relative aspect-[16/10] w-full overflow-hidden bg-paper-2">
-                  <img
-                    src={projectCoverSrc(project)}
-                    alt={projectCoverAlt(project)}
-                    width={1600}
-                    height={1000}
-                    loading={index === 0 ? "eager" : "lazy"}
-                    decoding="async"
-                    className="h-full w-full max-w-full object-cover object-top transition duration-300 group-hover:scale-[1.02]"
-                    style={{ imageRendering: "auto" }}
-                  />
-                </div>
-
-                <div className="p-4 sm:p-5">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="min-w-0">
-                      <p className="project-title text-xl text-ink transition-colors group-hover:text-blue sm:text-[1.375rem]">
-                        {project.name}
-                      </p>
-                      <p className="tag-blue mt-2 inline-flex">{category}</p>
-                    </div>
-                    <span className="grid size-9 shrink-0 place-items-center rounded-md bg-ink text-white transition-colors group-hover:bg-blue">
-                      <ArrowUpRight className="size-4" />
-                    </span>
-                  </div>
-                  <p className="mt-3 text-sm leading-6 text-ink-soft">
-                    {project.description}
-                  </p>
-                  <div className="mt-4 flex flex-wrap items-center gap-2">
-                    <span className="ml-auto inline-flex items-center gap-1 font-mono text-[14px] uppercase tracking-[0.14em] text-blue">
-                      Case study
-                      <ArrowUpRight className="size-3.5" />
-                    </span>
-                  </div>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
-
-        {/* Desktop: accordion + sticky preview */}
-        <div
-          ref={stageRef}
-          className="hidden min-w-0 items-start gap-12 lg:grid lg:grid-cols-12 xl:gap-16"
-        >
-          <div className="min-w-0 lg:col-span-5 xl:col-span-4">
-            <ul className="flex flex-col gap-1">
-              {items.map((project, index) => {
-                const isActive = index === active;
-                const category = splitTokens(project.category)[0];
-                return (
-                  <li key={project.slug}>
-                    <div
-                      className={cn(
-                        "relative overflow-hidden rounded-xl transition-all duration-300",
-                        isActive
-                          ? "bg-paper shadow-[var(--shadow-lift)] ring-1 ring-line"
-                          : "hover:bg-paper/70",
-                      )}
-                    >
-                      {isActive && (
-                        <span
-                          aria-hidden="true"
-                          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_0%_0%,color-mix(in_oklab,var(--blue)_8%,transparent),transparent_55%)]"
-                        />
-                      )}
-
-                      <button
-                        type="button"
-                        onClick={() => selectProject(index)}
-                        aria-expanded={isActive}
-                        aria-controls={`work-panel-${project.slug}`}
-                        className={cn(
-                          "group/item relative flex w-full items-start gap-4 text-left outline-none transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-blue/30 focus-visible:ring-offset-2",
-                          isActive ? "px-5 pb-2 pt-5" : "rounded-xl px-3 py-4",
-                        )}
-                      >
-                        <span className="relative mt-0.5 flex shrink-0 flex-col items-center">
-                          <span
-                            className={cn(
-                              "grid size-10 place-items-center rounded-lg font-sans text-[13px] font-bold tracking-wide transition-all duration-300",
-                              isActive
-                                ? "bg-ink text-white"
-                                : "bg-soft text-ink-soft group-hover/item:bg-blue-light group-hover/item:text-blue",
-                            )}
-                          >
-                            {project.number}
-                          </span>
-                        </span>
-
-                        <span className="min-w-0 flex-1 pt-1">
-                          <span
-                            className={cn(
-                              "project-title block transition-colors duration-200",
-                              isActive
-                                ? "text-[1.35rem] text-ink"
-                                : "text-xl font-semibold text-ink/50 group-hover/item:text-ink",
-                            )}
-                          >
-                            {project.name}
-                          </span>
-                          {!isActive && (
-                            <span className="mt-1.5 block font-sans text-[13px] font-medium uppercase tracking-[0.05em] text-ink-soft/70 transition-colors group-hover/item:text-blue">
-                              {category}
-                            </span>
-                          )}
-                        </span>
-
-                        <span
-                          className={cn(
-                            "mt-1 grid size-8 shrink-0 place-items-center rounded-md transition-all duration-300",
-                            isActive
-                              ? "translate-x-0.5 -translate-y-0.5 bg-blue text-white"
-                              : "text-ink/20 group-hover/item:bg-paper group-hover/item:text-blue",
-                          )}
-                        >
-                          <ArrowUpRight className="size-3.5" />
-                        </span>
-                      </button>
-
-                      {isActive && (
-                        <div
-                          id={`work-panel-${project.slug}`}
-                          className="animate-[heroFade_320ms_ease-out_both] relative px-5 pb-5 pl-[4.25rem]"
-                        >
-                          <p className="max-w-[42ch] text-sm leading-6 text-ink-soft">
-                            {project.description}
-                          </p>
-                          <div className="mt-4 flex flex-wrap items-center gap-2">
-                            <span className="tag-blue">{category}</span>
-                            <Link
-                              to="/work/$slug"
-                              params={{ slug: project.slug }}
-                              className="ml-auto inline-flex items-center gap-1 font-sans text-[13px] font-semibold uppercase tracking-[0.06em] text-blue transition-colors hover:text-blue-hover"
-                            >
-                              Case study
-                              <ArrowUpRight className="size-3.5" />
-                            </Link>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
+      <div className={`${pageWrap} pb-16 sm:pb-20 lg:pb-24`}>
+        <FeaturedWorkCard project={featured} />
+        {rest.length > 0 && (
+          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {rest.map((project) => (
+              <WorkIndexCard key={project.slug} project={project} />
+            ))}
           </div>
-
-          <div
-            ref={previewRef}
-            className="min-w-0 lg:sticky lg:top-[4.5rem] lg:col-span-7 lg:self-start xl:col-span-8"
-          >
-            {activeProject && (
-              <Link
-                to="/work/$slug"
-                params={{ slug: activeProject.slug }}
-                className="group relative block overflow-hidden rounded-xl border border-line bg-paper transition duration-250 hover:border-line-dark hover:shadow-[var(--shadow-lift)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue"
-              >
-                <div className="relative aspect-[16/10] w-full overflow-hidden bg-paper-2">
-                  {items.map((project, index) => (
-                    <img
-                      key={project.slug}
-                      src={projectCoverSrc(project)}
-                      alt={projectCoverAlt(project)}
-                      width={1600}
-                      height={1000}
-                      loading={index === 0 ? "eager" : "lazy"}
-                      decoding="async"
-                      className={cn(
-                        "absolute inset-0 h-full w-full object-cover object-top transition-opacity duration-300 ease-out",
-                        index === active ? "z-[1] opacity-100" : "z-0 opacity-0",
-                      )}
-                      style={{ imageRendering: "auto" }}
-                    />
-                  ))}
-                  <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] flex items-end justify-between bg-gradient-to-t from-ink/70 via-ink/20 to-transparent px-7 pb-6 pt-16">
-                    <div className="min-w-0 pr-2">
-                      <p className="font-mono text-[14px] uppercase tracking-[0.16em] text-white/70">
-                        Project {activeProject.number} / {String(items.length).padStart(2, "0")}
-                      </p>
-                      <p className="mt-1 project-title text-xl text-white">
-                        {activeProject.name}
-                      </p>
-                    </div>
-                    <span className="grid size-9 shrink-0 place-items-center rounded-md bg-ink text-white transition-colors duration-250 group-hover:bg-blue">
-                      <ArrowUpRight className="size-4" />
-                    </span>
-                  </div>
-                </div>
-              </Link>
-            )}
-          </div>
-        </div>
+        )}
       </div>
     </section>
   );
@@ -895,7 +778,7 @@ export function DesignSystemSpecimen() {
               <span className="swatch bg-soft border border-line" />
               <span className="swatch bg-blue" />
             </div>
-            <p className="mt-4 font-mono text-[14px] text-ink-soft">paper / black / soft / blue</p>
+            <p className="mt-4 font-mono text-[14px] text-ink-soft">paper / ink / muted / primary</p>
           </div>
           <div className="specimen md:col-span-5">
             <p className="spec-label">Product components</p>
@@ -1010,7 +893,7 @@ export function ContactMethods({
 
 export function Availability() {
   return (
-    <span className="inline-flex items-center gap-2.5 rounded-md border border-blue-border bg-blue-light px-4 py-2 font-mono text-[13px] font-semibold uppercase tracking-[0.14em] text-blue">
+    <span className="inline-flex items-center gap-2.5 rounded-full border border-blue-border bg-blue-light px-4 py-2 font-sans text-[13px] font-semibold text-blue">
       <span className="relative flex size-2.5 shrink-0" aria-hidden="true">
         <span className="absolute inset-0 animate-ping rounded-full bg-blue opacity-30" />
         <span className="relative m-auto size-2 rounded-full bg-blue ring-2 ring-white" />
